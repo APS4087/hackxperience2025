@@ -9,8 +9,12 @@ interface Registration {
   id: number;
   full_name: string;
   email: string;
-  university: string;
-  skills: string[];
+  sim_id: string;
+  course_and_university: string;
+  has_team: boolean;
+  is_team_lead: boolean | null;
+  team_lead_email: string | null;
+  team_name: string | null;
   registered_at: string;
 }
 
@@ -130,8 +134,10 @@ export default function AdminDashboard() {
               <tr className="bg-muted/50">
                 <th className="px-6 py-3 text-left text-sm font-medium">Name</th>
                 <th className="px-6 py-3 text-left text-sm font-medium">Email</th>
-                <th className="px-6 py-3 text-left text-sm font-medium">University</th>
-                <th className="px-6 py-3 text-left text-sm font-medium">Skills</th>
+                <th className="px-6 py-3 text-left text-sm font-medium">SIM ID</th>
+                <th className="px-6 py-3 text-left text-sm font-medium">Course & University</th>
+                <th className="px-6 py-3 text-left text-sm font-medium">Team Status</th>
+                <th className="px-6 py-3 text-left text-sm font-medium">Team Name</th>
                 <th className="px-6 py-3 text-left text-sm font-medium">Registered</th>
               </tr>
             </thead>
@@ -140,19 +146,14 @@ export default function AdminDashboard() {
                 <tr key={reg.id} className="hover:bg-muted/50">
                   <td className="px-6 py-4 whitespace-nowrap">{reg.full_name}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{reg.email}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{reg.university}</td>
-                  <td className="px-6 py-4">
-                    <div className="flex flex-wrap gap-1">
-                      {reg.skills.map((skill) => (
-                        <span
-                          key={skill}
-                          className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary"
-                        >
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
+                  <td className="px-6 py-4 whitespace-nowrap">{reg.sim_id}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{reg.course_and_university}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {reg.has_team ? (
+                      reg.is_team_lead ? 'Team Lead' : 'Team Member'
+                    ) : 'No Team'}
                   </td>
+                  <td className="px-6 py-4 whitespace-nowrap">{reg.team_name || '-'}</td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {new Date(reg.registered_at).toLocaleDateString()}
                   </td>

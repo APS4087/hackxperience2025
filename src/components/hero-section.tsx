@@ -1,44 +1,32 @@
-"use client";
-
-import { useState, useEffect } from "react";
+import { Suspense } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import dynamic from "next/dynamic";
+
+// Dynamically import the countdown component
+const CountdownTimer = dynamic(() => import("./countdown-timer"), {
+  ssr: false,
+  loading: () => (
+    <div className="flex justify-center gap-4 md:gap-8 mb-10">
+      {[1, 2, 3].map((i) => (
+        <div key={i} className="w-16 md:w-24 h-16 md:h-24 bg-card rounded-lg border border-border animate-pulse" />
+      ))}
+    </div>
+  ),
+});
 
 export function HeroSection() {
-  const [days, setDays] = useState(0);
-  const [hours, setHours] = useState(0);
-  const [minutes, setMinutes] = useState(0);
-  
-  // Hackathon date - example: May 15, 2025
-  const hackathonDate = new Date("2025-05-15T00:00:00");
-  
-  useEffect(() => {
-    const timer = setInterval(() => {
-      const now = new Date();
-      const difference = hackathonDate.getTime() - now.getTime();
-      
-      const d = Math.floor(difference / (1000 * 60 * 60 * 24));
-      const h = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const m = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-      
-      setDays(d);
-      setHours(h);
-      setMinutes(m);
-    }, 1000);
-    
-    return () => clearInterval(timer);
-  }, []);
-  
   return (
     <section className="relative overflow-hidden py-32 md:py-40">
-      {/* Background gradient effect */}
+      {/* Background gradient effect - moved to a separate component */}
       <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-red-950/20 z-0" />
       
-      {/* Animated shapes in background */}
+      {/* Animated shapes - moved to a separate component */}
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-red-600/10 rounded-full blur-3xl animate-pulse" />
       <div className="absolute bottom-1/4 right-1/3 w-64 h-64 bg-blue-600/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
       
       <div className="container relative z-10 mx-auto px-4 text-center">
+        {/* Main heading with priority loading */}
         <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-6">
           <span className="bg-gradient-to-r from-primary to-red-500 bg-clip-text text-transparent">HackXperience</span> 2025
         </h1>
@@ -47,12 +35,16 @@ export function HeroSection() {
           Join the ultimate 48-hour innovation marathon. Build, learn, and connect with the brightest minds.
         </p>
         
-        {/* Countdown timer */}
-        <div className="flex justify-center gap-4 md:gap-8 mb-10">
-          <CountdownItem value={days} label="Days" />
-          <CountdownItem value={hours} label="Hours" />
-          <CountdownItem value={minutes} label="Minutes" />
-        </div>
+        {/* Countdown timer with suspense boundary */}
+        <Suspense fallback={
+          <div className="flex justify-center gap-4 md:gap-8 mb-10">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="w-16 md:w-24 h-16 md:h-24 bg-card rounded-lg border border-border animate-pulse" />
+            ))}
+          </div>
+        }>
+          <CountdownTimer />
+        </Suspense>
         
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
@@ -79,16 +71,5 @@ export function HeroSection() {
         </div>
       </div>
     </section>
-  );
-}
-
-function CountdownItem({ value, label }: { value: number; label: string }) {
-  return (
-    <div className="flex flex-col items-center">
-      <div className="w-16 md:w-24 h-16 md:h-24 bg-card rounded-lg border border-border flex items-center justify-center">
-        <span className="text-2xl md:text-4xl font-bold">{value}</span>
-      </div>
-      <span className="text-sm md:text-base text-muted-foreground mt-2">{label}</span>
-    </div>
   );
 } 
