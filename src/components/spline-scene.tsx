@@ -66,6 +66,8 @@ export function SplineScene() {
         canvas.style.backgroundColor = 'transparent';
         canvas.style.opacity = '1';
         canvas.style.mixBlendMode = 'normal';
+        canvas.style.position = 'absolute';
+        canvas.style.inset = '0';
       }
 
       if (splineApp.renderer) {
@@ -73,11 +75,14 @@ export function SplineScene() {
         const container = canvas?.parentElement;
         if (container) {
           const { width, height } = container.getBoundingClientRect();
+          // Set size with device pixel ratio
+          const pixelRatio = Math.min(window.devicePixelRatio, 2);
+          splineApp.renderer.setPixelRatio(pixelRatio);
           splineApp.renderer.setSize(width, height, false);
+          
+          // Force a resize event to ensure proper sizing
+          window.dispatchEvent(new Event('resize'));
         }
-        
-        // Optimize renderer settings
-        splineApp.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         
         // Only set up animation loop if WebGL is supported
         if (webglSupported) {
@@ -93,9 +98,15 @@ export function SplineScene() {
 
       const camera = splineApp.scene?.children.find((child: Object3D) => child.name === 'Camera') as PerspectiveCamera;
       if (camera) {
-        // Adjust camera position to better center the 3D element
+        // Adjust camera position and properties for better centering
         camera.position.set(0, 0, 600);
+        camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
+        
+        // Force an initial render
+        if (splineApp.renderer && splineApp.scene) {
+          splineApp.renderer.render(splineApp.scene, camera);
+        }
       }
     } catch (err) {
       console.error('Error setting up Spline scene:', err);
@@ -151,17 +162,19 @@ export function SplineScene() {
   }
 
   return (
-    <div className="w-full h-full">
-      <Spline
-        scene="https://prod.spline.design/H1BsXXkOLnsN4CcE/scene.splinecode"
-        onLoad={onLoad}
-        style={{
-          background: 'transparent',
-          width: '100%',
-          height: '100%',
-          mixBlendMode: 'normal',
-        }}
-      />
+    <div className="w-full h-full relative">
+      <div className="absolute inset-0">
+        <Spline
+          scene="https://prod.spline.design/H1BsXXkOLnsN4CcE/scene.splinecode"
+          onLoad={onLoad}
+          style={{
+            background: 'transparent',
+            width: '100%',
+            height: '100%',
+            mixBlendMode: 'normal',
+          }}
+        />
+      </div>
       {/* Overlay to hide watermark */}
       <div className="absolute bottom-0 right-0 w-48 h-24 bg-background backdrop-blur-sm rounded-tl-lg" />
     </div>
