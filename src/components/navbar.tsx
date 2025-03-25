@@ -7,7 +7,7 @@ export function Navbar() {
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <Link 
           href="/" 
-          className="font-bold text-xl tracking-tight bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent"
+          className="font-bold text-xl tracking-tight bg-gradient-to-r from-primary to-red-500 bg-clip-text text-transparent"
         >
           HackXperience
         </Link>

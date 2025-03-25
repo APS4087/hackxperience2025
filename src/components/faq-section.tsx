@@ -3,15 +3,15 @@ import React from 'react';
 const faqs = [
   {
     question: "Who can participate in HackXperience?",
-    answer: "HackXperience is open to all students, professionals, and tech enthusiasts. Whether you're a beginner or an experienced developer, everyone is welcome!"
+    answer: "All SIM students are welcome to participate, regardless of their educational background or programming experience."
   },
   {
     question: "Do I need to have a team before registering?",
-    answer: "No, you can register individually and form a team during the event. We'll have team formation activities to help you find teammates."
+    answer: "Yes,"
   },
   {
     question: "Is there a registration fee?",
-    answer: "No, HackXperience is completely free to attend. We'll provide food, drinks, and swag during the event."
+    answer: "We want to make this event open for hackathon-enthusiasts like you! Participation is completely FREE for all SIM students, thanks to our generous sponsors."
   },
   {
     question: "What should I bring to the hackathon?",

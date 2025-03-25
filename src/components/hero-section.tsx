@@ -32,15 +32,15 @@ export function HeroSection() {
   return (
     <section className="relative overflow-hidden py-32 md:py-40">
       {/* Background gradient effect */}
-      <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-purple-950/20 z-0" />
+      <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-red-950/20 z-0" />
       
       {/* Animated shapes in background */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl animate-pulse" />
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-red-600/10 rounded-full blur-3xl animate-pulse" />
       <div className="absolute bottom-1/4 right-1/3 w-64 h-64 bg-blue-600/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
       
       <div className="container relative z-10 mx-auto px-4 text-center">
         <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-6">
-          <span className="bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">HackXperience</span> 2025
+          <span className="bg-gradient-to-r from-primary to-red-500 bg-clip-text text-transparent">HackXperience</span> 2025
         </h1>
         
         <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto">
