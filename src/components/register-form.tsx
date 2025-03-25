@@ -2,20 +2,66 @@
 
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/lib/supabase";
+
+interface RegistrationData {
+  full_name: string;
+  email: string;
+  university: string;
+  skills: string[];
+  terms_accepted: boolean;
+}
 
 export function RegisterForm() {
   const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState<RegistrationData>({
+    full_name: '',
+    email: '',
+    university: '',
+    skills: [],
+    terms_accepted: false
+  });
   
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    
-    // Registration logic would go here
-    alert("Registration successful!");
-    setLoading(false);
+    try {
+      const { error } = await supabase
+        .from('registrations')
+        .insert([
+          {
+            full_name: formData.full_name,
+            email: formData.email,
+            university: formData.university,
+            skills: formData.skills,
+            terms_accepted: formData.terms_accepted,
+            registered_at: new Date().toISOString()
+          }
+        ]);
+        
+      if (error) throw error;
+      
+      alert("Registration successful!");
+      // Reset form
+      setFormData({
+        full_name: '',
+        email: '',
+        university: '',
+        skills: [],
+        terms_accepted: false
+      });
+    } catch (error) {
+      alert("Error submitting registration. Please try again.");
+      console.error("Registration error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  const handleSkillsChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedOptions = Array.from(e.target.selectedOptions).map(option => option.value);
+    setFormData(prev => ({ ...prev, skills: selectedOptions }));
   };
   
   return (
@@ -34,6 +80,8 @@ export function RegisterForm() {
             id="name"
             type="text"
             required
+            value={formData.full_name}
+            onChange={(e) => setFormData(prev => ({ ...prev, full_name: e.target.value }))}
             className={cn(
               "w-full px-3 py-2 border rounded-md",
               "bg-background border-input",
@@ -51,6 +99,8 @@ export function RegisterForm() {
             id="email"
             type="email"
             required
+            value={formData.email}
+            onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
             className={cn(
               "w-full px-3 py-2 border rounded-md",
               "bg-background border-input",
@@ -68,6 +118,8 @@ export function RegisterForm() {
             id="university"
             type="text"
             required
+            value={formData.university}
+            onChange={(e) => setFormData(prev => ({ ...prev, university: e.target.value }))}
             className={cn(
               "w-full px-3 py-2 border rounded-md",
               "bg-background border-input",
@@ -84,6 +136,8 @@ export function RegisterForm() {
           <select
             id="skills"
             multiple
+            value={formData.skills}
+            onChange={handleSkillsChange}
             className={cn(
               "w-full px-3 py-2 border rounded-md",
               "bg-background border-input",
@@ -104,6 +158,8 @@ export function RegisterForm() {
             id="terms"
             type="checkbox"
             required
+            checked={formData.terms_accepted}
+            onChange={(e) => setFormData(prev => ({ ...prev, terms_accepted: e.target.checked }))}
             className="h-4 w-4 rounded border-input"
           />
           <label htmlFor="terms" className="text-sm">
