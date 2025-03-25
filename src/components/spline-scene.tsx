@@ -87,7 +87,8 @@ export function SplineScene() {
 
       const camera = splineApp.scene?.children.find((child: Object3D) => child.name === 'Camera') as PerspectiveCamera;
       if (camera) {
-        camera.position.set(0, 0, 1000);
+        // Adjust camera position to better center the 3D element
+        camera.position.set(0, 0, 800);
         camera.updateProjectionMatrix();
       }
     } catch (err) {
@@ -140,7 +141,7 @@ export function SplineScene() {
   }
 
   return (
-    <div className="w-full h-full relative">
+    <div className="w-full h-full relative flex items-center justify-center">
       <Spline
         scene="https://prod.spline.design/H1BsXXkOLnsN4CcE/scene.splinecode"
         onLoad={onLoad}
@@ -149,6 +150,10 @@ export function SplineScene() {
           width: '100%',
           height: '100%',
           mixBlendMode: 'normal',
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
         }}
       />
       {/* Overlay to hide watermark */}
