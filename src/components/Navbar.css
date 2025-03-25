@@ -1,0 +1,18 @@
+.navbar {
+  position: fixed;
+  right: 50px;
+  top: 50px;
+  z-index: 50;
+}
+
+.navbarMainDiv {
+  background: #ff6b6b;
+  width: 480px;
+  height: 650px;
+  border-radius: 25px;
+  position: fixed;
+  top: 25px;
+  right: 25px;
+  transform-origin: top right;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+} 
