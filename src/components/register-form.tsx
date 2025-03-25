@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback } from "react";
 import { supabase } from "@/lib/supabase";
 import { InteractiveHoverButton } from "@/components/magicui/interactive-hover-button";
 import {
@@ -299,11 +299,6 @@ export function RegisterForm() {
       team_lead_email: isTeamLead ? null : prev.team_lead_email
     }));
   };
-
-  // Memoize expensive computations
-  const isFormValid = useMemo(() => {
-    return Object.keys(errors).length === 0;
-  }, [errors]);
 
   return (
     <Card className="relative w-full max-w-md mx-auto overflow-hidden">

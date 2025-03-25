@@ -1,12 +1,11 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 
 export default function CountdownTimer() {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0 });
   
-  // Hackathon date - example: May 15, 2025
-  const hackathonDate = new Date("2025-05-15T00:00:00");
+  const hackathonDate = useMemo(() => new Date("2025-05-15T00:00:00"), []);
   
   const calculateTimeLeft = useCallback(() => {
     const now = new Date();
