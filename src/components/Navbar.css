@@ -1,7 +1,7 @@
 .navbar {
   position: fixed;
-  right: 50px;
-  top: 50px;
+  right: 25px;
+  top: 25px;
   z-index: 50;
 }
 
@@ -15,4 +15,19 @@
   right: 25px;
   transform-origin: top right;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+@media (max-width: 500px) {
+  .navbar {
+    right: 15px;
+    top: 15px;
+  }
+
+  .navbarMainDiv {
+    width: calc(100vw - 30px);
+    height: calc(100vh - 30px);
+    top: 15px;
+    right: 15px;
+    border-radius: 20px;
+  }
 } 

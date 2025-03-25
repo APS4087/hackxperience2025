@@ -7,13 +7,13 @@ import "./Navbar.css";
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isLargeScreen, setIsLargeScreen] = useState(
-    typeof window !== "undefined" ? window.innerWidth > 500 : false
+    typeof window !== "undefined" ? window.innerWidth > 768 : false
   );
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleResize = () => {
-      setIsLargeScreen(window.innerWidth > 500);
+      setIsLargeScreen(window.innerWidth > 768);
     };
 
     const handleClickOutside = (event: MouseEvent) => {
@@ -33,10 +33,10 @@ export function Navbar() {
 
   const variants = {
     closed: {
-      width: "100px",
-      height: "40px",
-      top: "50px",
-      left: "50px",
+      width: isLargeScreen ? "100px" : "80px",
+      height: isLargeScreen ? "40px" : "35px",
+      top: isLargeScreen ? "50px" : "25px",
+      left: isLargeScreen ? "50px" : "25px",
       scale: 1,
       transition: {
         duration: 0.75,
@@ -46,10 +46,10 @@ export function Navbar() {
       }
     },
     open: {
-      width: isLargeScreen ? "480px" : "100%",
-      height: isLargeScreen ? "650px" : "480px",
-      top: "25px",
-      left: "25px",
+      width: isLargeScreen ? "480px" : "calc(100vw - 30px)",
+      height: isLargeScreen ? "650px" : "calc(100vh - 30px)",
+      top: isLargeScreen ? "25px" : "15px",
+      left: isLargeScreen ? "25px" : "15px",
       scale: 1,
       transition: {
         duration: 0.75,

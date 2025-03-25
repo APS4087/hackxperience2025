@@ -23,7 +23,7 @@
   text-transform: capitalize;
   text-decoration: none;
   color: black;
-  font-family: "Eight Bit Dragon", var(--font-inter);
+  font-family: var(--font-eight-bit-dragon), var(--font-inter);
 }
 
 .perspective {
@@ -47,22 +47,46 @@
   color: black;
 }
 
-@media (max-width: 500px) {
+@media (max-width: 768px) {
   .navbarContent {
     padding: 0px 25px;
   }
+
   .navPages {
-    perspective: 200px;
+    gap: 15px;
   }
+
+  .navPages a {
+    font-size: 36px;
+  }
+
+  .navLinks {
+    gap: 15px;
+  }
+
+  .navLinks a {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 500px) {
+  .navbarContent {
+    padding: 0px 20px;
+  }
+
+  .navPages {
+    gap: 12px;
+  }
+
   .navPages a {
     font-size: 32px;
   }
+
   .navLinks {
-    width: 100%;
-    column-gap: 20px;
-    row-gap: 10px;
+    gap: 12px;
   }
+
   .navLinks a {
-    font-size: 16px;
+    font-size: 14px;
   }
 } 

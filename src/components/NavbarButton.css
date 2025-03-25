@@ -48,7 +48,8 @@
   pointer-events: none;
   font-weight: 500;
   margin: 0;
-  font-family: "Eight Bit Dragon", var(--font-geist-sans);
+  font-family: var(--font-eight-bit-dragon), var(--font-inter);
+  text-transform: uppercase;
 }
 
 .navP p:nth-child(1) {
@@ -76,4 +77,19 @@
 
 .navbarWrapper:hover .navP p:nth-child(2) {
   opacity: 1;
+}
+
+@media (max-width: 500px) {
+  .navbarMainButtonDiv {
+    width: 80px;
+    height: 35px;
+    top: 25px;
+    left: 25px;
+    border-radius: 20px;
+  }
+
+  .navP p {
+    font-size: 14px;
+    line-height: 20px;
+  }
 } 
