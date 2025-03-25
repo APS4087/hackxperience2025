@@ -1,19 +1,9 @@
 "use client";
 
-import { useEffect, useState, useRef, Suspense } from "react";
-import dynamic from 'next/dynamic';
+import { useEffect, useState, useRef } from "react";
 import type { Application } from "@splinetool/runtime";
 import type { Object3D, PerspectiveCamera, WebGLRenderer } from "three";
-
-// Lazy load the Spline component
-const LazySpline = dynamic(() => import("@splinetool/react-spline"), {
-  ssr: false,
-  loading: () => (
-    <div className="w-full h-full flex items-center justify-center">
-      <div className="animate-pulse text-foreground/50">Loading 3D Scene...</div>
-    </div>
-  ),
-});
+import Spline from '@splinetool/react-spline';
 
 interface SplineApplication extends Application {
   renderer?: WebGLRenderer;
@@ -37,7 +27,7 @@ export function SplineScene() {
     };
   }, []);
 
-  function onLoad(splineApp: SplineApplication) {
+  const onLoad = (splineApp: SplineApplication) => {
     splineRef.current = splineApp;
     
     try {
@@ -66,7 +56,7 @@ export function SplineScene() {
       console.error('Error setting up Spline scene:', err);
       setError('Failed to load 3D scene');
     }
-  }
+  };
 
   // Handle window resize
   useEffect(() => {
@@ -81,7 +71,11 @@ export function SplineScene() {
   }, []);
 
   if (!mounted) {
-    return null;
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <div className="animate-pulse text-foreground/50">Loading 3D Scene...</div>
+      </div>
+    );
   }
 
   if (error) {
@@ -94,22 +88,16 @@ export function SplineScene() {
 
   return (
     <div className="w-full h-full relative">
-      <Suspense fallback={
-        <div className="w-full h-full flex items-center justify-center">
-          <div className="animate-pulse text-foreground/50">Loading 3D Scene...</div>
-        </div>
-      }>
-        <LazySpline
-          scene="https://prod.spline.design/H1BsXXkOLnsN4CcE/scene.splinecode"
-          onLoad={onLoad}
-          style={{
-            background: 'transparent',
-            width: '100%',
-            height: '100%',
-            mixBlendMode: 'normal',
-          }}
-        />
-      </Suspense>
+      <Spline
+        scene="https://prod.spline.design/H1BsXXkOLnsN4CcE/scene.splinecode"
+        onLoad={onLoad}
+        style={{
+          background: 'transparent',
+          width: '100%',
+          height: '100%',
+          mixBlendMode: 'normal',
+        }}
+      />
       {/* Overlay to hide watermark */}
       <div className="absolute bottom-0 right-0 w-48 h-24 bg-background backdrop-blur-sm rounded-tl-lg" />
     </div>
