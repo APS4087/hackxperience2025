@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import type { Application } from "@splinetool/runtime";
 import type { Object3D, PerspectiveCamera, WebGLRenderer, Scene } from "three";
+import dynamic from 'next/dynamic';
 import Spline from '@splinetool/react-spline';
 
 interface SplineApplication extends Application {
@@ -15,11 +16,19 @@ export function SplineScene() {
   const [mounted, setMounted] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [webglSupported, setWebglSupported] = useState(true);
+  const [isClient, setIsClient] = useState(false);
   const splineRef = useRef<SplineApplication | null>(null);
   const resizeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Check if we're on the client side
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   // Check WebGL support
   useEffect(() => {
+    if (!isClient) return;
+
     const checkWebGLSupport = () => {
       try {
         const canvas = document.createElement('canvas');
@@ -31,9 +40,10 @@ export function SplineScene() {
     };
 
     checkWebGLSupport();
-  }, []);
+  }, [isClient]);
 
   useEffect(() => {
+    if (!isClient) return;
     setMounted(true);
     return () => {
       if (splineRef.current) {
@@ -43,9 +53,11 @@ export function SplineScene() {
         clearTimeout(resizeTimeoutRef.current);
       }
     };
-  }, []);
+  }, [isClient]);
 
   const onLoad = useCallback((splineApp: SplineApplication) => {
+    if (!isClient) return;
+    
     splineRef.current = splineApp;
     
     try {
@@ -83,10 +95,12 @@ export function SplineScene() {
       console.error('Error setting up Spline scene:', err);
       setError('Failed to load 3D scene');
     }
-  }, [webglSupported]);
+  }, [webglSupported, isClient]);
 
   // Debounced window resize handler
   useEffect(() => {
+    if (!isClient) return;
+
     const handleResize = () => {
       if (resizeTimeoutRef.current) {
         clearTimeout(resizeTimeoutRef.current);
@@ -101,9 +115,9 @@ export function SplineScene() {
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [isClient]);
 
-  if (!mounted) {
+  if (!isClient || !mounted) {
     return (
       <div className="w-full h-full flex items-center justify-center">
         <div className="animate-pulse text-foreground/50">Loading 3D Scene...</div>

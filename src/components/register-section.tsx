@@ -1,6 +1,16 @@
 import React from 'react';
 import { RegisterForm } from './register-form';
-import { SplineScene } from './spline-scene';
+import dynamic from 'next/dynamic';
+
+// Dynamically import SplineScene with no SSR
+const SplineScene = dynamic(() => import('./spline-scene').then(mod => mod.SplineScene), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/10 to-red-500/10 rounded-lg">
+      <div className="animate-pulse text-foreground/50">Loading 3D Scene...</div>
+    </div>
+  ),
+});
 
 export function RegisterSection() {
   return (
