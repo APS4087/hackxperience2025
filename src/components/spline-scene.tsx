@@ -69,9 +69,15 @@ export function SplineScene() {
       }
 
       if (splineApp.renderer) {
+        // Get the container dimensions
+        const container = canvas?.parentElement;
+        if (container) {
+          const { width, height } = container.getBoundingClientRect();
+          splineApp.renderer.setSize(width, height, false);
+        }
+        
         // Optimize renderer settings
         splineApp.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        splineApp.renderer.setSize(window.innerWidth, window.innerHeight, false);
         
         // Only set up animation loop if WebGL is supported
         if (webglSupported) {
@@ -88,7 +94,7 @@ export function SplineScene() {
       const camera = splineApp.scene?.children.find((child: Object3D) => child.name === 'Camera') as PerspectiveCamera;
       if (camera) {
         // Adjust camera position to better center the 3D element
-        camera.position.set(0, 0, 800);
+        camera.position.set(0, 0, 600);
         camera.updateProjectionMatrix();
       }
     } catch (err) {
@@ -108,7 +114,11 @@ export function SplineScene() {
       
       resizeTimeoutRef.current = setTimeout(() => {
         if (splineRef.current?.renderer) {
-          splineRef.current.renderer.setSize(window.innerWidth, window.innerHeight, false);
+          const container = document.querySelector('canvas')?.parentElement;
+          if (container) {
+            const { width, height } = container.getBoundingClientRect();
+            splineRef.current.renderer.setSize(width, height, false);
+          }
         }
       }, 100);
     };
@@ -141,7 +151,7 @@ export function SplineScene() {
   }
 
   return (
-    <div className="w-full h-full relative flex items-center justify-center">
+    <div className="w-full h-full">
       <Spline
         scene="https://prod.spline.design/H1BsXXkOLnsN4CcE/scene.splinecode"
         onLoad={onLoad}
@@ -150,10 +160,6 @@ export function SplineScene() {
           width: '100%',
           height: '100%',
           mixBlendMode: 'normal',
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
         }}
       />
       {/* Overlay to hide watermark */}

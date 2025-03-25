@@ -18,8 +18,10 @@ export function RegisterSection() {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
           {/* 3D Element Container Side */}
-          <div className="md:col-span-8 w-full h-[800px] rounded-lg shadow-lg overflow-hidden bg-background/5">
-            <SplineScene />
+          <div className="md:col-span-8 w-full h-[800px] rounded-lg shadow-lg overflow-hidden bg-background/5 relative">
+            <div className="absolute inset-0">
+              <SplineScene />
+            </div>
           </div>
 
           {/* Registration Form Side */}
