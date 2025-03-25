@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef, Suspense } from "react";
 import dynamic from 'next/dynamic';
 import type { Application } from "@splinetool/runtime";
-import type { Object3D, Camera } from "three";
+import type { Object3D, PerspectiveCamera, WebGLRenderer } from "three";
 
 // Lazy load the Spline component
 const LazySpline = dynamic(() => import("@splinetool/react-spline"), {
@@ -15,10 +15,17 @@ const LazySpline = dynamic(() => import("@splinetool/react-spline"), {
   ),
 });
 
+interface SplineApplication extends Application {
+  renderer?: WebGLRenderer;
+  scene?: {
+    children: Object3D[];
+  };
+}
+
 export function SplineScene() {
   const [mounted, setMounted] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const splineRef = useRef<Application | null>(null);
+  const splineRef = useRef<SplineApplication | null>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -30,7 +37,7 @@ export function SplineScene() {
     };
   }, []);
 
-  function onLoad(splineApp: Application) {
+  function onLoad(splineApp: SplineApplication) {
     splineRef.current = splineApp;
     
     try {
@@ -50,7 +57,7 @@ export function SplineScene() {
       }
 
       // Adjust camera position to zoom out
-      const camera = (splineApp as Application & { scene?: { children: Object3D[] } })?.scene?.children.find((child: Object3D) => child.name === 'Camera') as Camera;
+      const camera = splineApp.scene?.children.find((child: Object3D) => child.name === 'Camera') as PerspectiveCamera;
       if (camera) {
         camera.position.set(0, 0, 1000);
         camera.updateProjectionMatrix();
