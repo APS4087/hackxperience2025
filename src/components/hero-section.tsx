@@ -1,75 +1,66 @@
-import { Suspense } from "react";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
-import dynamic from "next/dynamic";
-
-// Dynamically import the countdown component
-const CountdownTimer = dynamic(() => import("./countdown-timer"), {
-  ssr: false,
-  loading: () => (
-    <div className="flex justify-center gap-4 md:gap-8 mb-10">
-      {[1, 2, 3].map((i) => (
-        <div key={i} className="w-16 md:w-24 h-16 md:h-24 bg-card rounded-lg border border-border animate-pulse" />
-      ))}
-    </div>
-  ),
-});
+"use client";
+import React, { useRef, useState, useEffect } from "react";
+import { ContainerScroll } from "@/components/ui/container-scroll-animation";
+import { Volume2, VolumeX } from "lucide-react";
 
 export function HeroSection() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isMuted, setIsMuted] = useState(true);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.play()
+        .catch((error) => {
+          console.log("Video playback failed:", error);
+        });
+    }
+  }, []);
+
+  const toggleMute = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !videoRef.current.muted;
+      setIsMuted(!isMuted);
+    }
+  };
+
   return (
-    <section className="relative overflow-hidden py-32 md:py-40">
-      {/* Background gradient effect - moved to a separate component */}
-      <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-red-950/20 z-0" />
-      
-      {/* Animated shapes - moved to a separate component */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-red-600/10 rounded-full blur-3xl animate-pulse" />
-      <div className="absolute bottom-1/4 right-1/3 w-64 h-64 bg-blue-600/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
-      
-      <div className="container relative z-10 mx-auto px-4 text-center">
-        {/* Main heading with priority loading */}
-        <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-6">
-          <span className="bg-gradient-to-r from-primary to-red-500 bg-clip-text text-transparent">HackXperience</span> 2025
-        </h1>
-        
-        <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-          Join the ultimate 48-hour innovation marathon. Build, learn, and connect with the brightest minds.
-        </p>
-        
-        {/* Countdown timer with suspense boundary */}
-        <Suspense fallback={
-          <div className="flex justify-center gap-4 md:gap-8 mb-10">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="w-16 md:w-24 h-16 md:h-24 bg-card rounded-lg border border-border animate-pulse" />
-            ))}
-          </div>
-        }>
-          <CountdownTimer />
-        </Suspense>
-        
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link
-            href="#register"
-            className={cn(
-              "px-8 py-3 rounded-md text-lg font-medium",
-              "bg-primary text-primary-foreground",
-              "hover:bg-primary/90 transition-colors"
-            )}
+    <div className="flex flex-col overflow-hidden -mx-4 sm:mx-0">
+      <ContainerScroll
+        titleComponent={
+          <>
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold text-black dark:text-white px-4 sm:px-0">
+              Join the ultimate <br />
+              <span className="text-5xl sm:text-6xl md:text-7xl lg:text-[8rem] font-bold mt-1 leading-none bg-gradient-to-r from-primary to-red-500 bg-clip-text text-transparent">
+                HackXperience
+              </span>
+            </h1>
+          </>
+        }
+      >
+        <div className="relative w-full h-full px-4 sm:px-0">
+          <video
+            ref={videoRef}
+            loop
+            playsInline
+            muted
+            className="absolute inset-0 w-full h-full object-cover rounded-xl sm:rounded-2xl"
           >
-            Register Now
-          </Link>
-          
-          <Link
-            href="#learn-more"
-            className={cn(
-              "px-8 py-3 rounded-md text-lg font-medium",
-              "bg-secondary text-secondary-foreground",
-              "hover:bg-secondary/90 transition-colors"
-            )}
+            <source src="/vids/simitc2024-hackathon.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+          <button
+            onClick={toggleMute}
+            className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 p-1.5 sm:p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors z-10"
+            aria-label={isMuted ? "Unmute video" : "Mute video"}
           >
-            Learn More
-          </Link>
+            {isMuted ? (
+              <VolumeX className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+            ) : (
+              <Volume2 className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+            )}
+          </button>
         </div>
-      </div>
-    </section>
+      </ContainerScroll>
+    </div>
   );
 } 

@@ -24,7 +24,6 @@ interface RegistrationData {
   is_team_lead: boolean | null;
   team_lead_email: string | null;
   team_name: string | null;
-  terms_accepted: boolean;
 }
 
 interface FormErrors {
@@ -48,8 +47,7 @@ export function RegisterForm() {
     has_team: false,
     is_team_lead: null,
     team_lead_email: null,
-    team_name: null,
-    terms_accepted: true
+    team_name: null
   });
 
   const validateEmail = useCallback((email: string) => {
@@ -194,7 +192,6 @@ export function RegisterForm() {
             is_team_lead: formData.is_team_lead,
             team_lead_email: formData.team_lead_email,
             team_name: formData.team_name,
-            terms_accepted: formData.terms_accepted,
             registered_at: new Date().toISOString()
           }
         ]);
@@ -211,8 +208,7 @@ export function RegisterForm() {
         has_team: false,
         is_team_lead: null,
         team_lead_email: null,
-        team_name: null,
-        terms_accepted: true
+        team_name: null
       });
     } catch (error) {
       console.error("Registration error:", error);
@@ -501,22 +497,9 @@ export function RegisterForm() {
             </>
           )}
 
-          <div className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              id="terms"
-              checked={formData.terms_accepted}
-              onChange={(e) => setFormData(prev => ({ ...prev, terms_accepted: e.target.checked }))}
-              className="h-4 w-4"
-            />
-            <Label htmlFor="terms" className="text-sm">
-              I agree to the terms and conditions
-            </Label>
-          </div>
-
           <InteractiveHoverButton
             type="submit"
-            disabled={loading || !formData.terms_accepted}
+            disabled={loading}
             className="w-full"
           >
             {loading ? "Registering..." : "Register Now"}
