@@ -1,103 +1,176 @@
-import Image from "next/image";
+import { HeroSection } from "@/components/hero-section";
+import { Navbar } from "@/components/navbar";
+import { RegisterForm } from "@/components/register-form";
+import { Footer } from "@/components/footer";
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+    <div className="min-h-screen flex flex-col">
+      <Navbar />
+      
+      <main className="flex-1">
+        <HeroSection />
+        
+        <section id="about" className="py-20 bg-background">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl font-bold mb-12 text-center">About HackXperience 2025</h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+              <div>
+                <p className="text-lg mb-6">
+                  HackXperience is the premier hackathon event bringing together talented developers,
+                  designers, and innovators from around the world.
+                </p>
+                <p className="text-lg mb-6">
+                  Over the course of 48 hours, participants will collaborate in teams to build
+                  groundbreaking projects that tackle real-world challenges.
+                </p>
+                <p className="text-lg mb-6">
+                  Whether you're a seasoned developer or just starting your coding journey,
+                  HackXperience welcomes all skill levels and backgrounds.
+                </p>
+              </div>
+              
+              <div className="bg-card rounded-xl p-6 shadow-lg border border-border/40">
+                <h3 className="text-xl font-semibold mb-4">Event Highlights</h3>
+                <ul className="space-y-3">
+                  {highlights.map((highlight, index) => (
+                    <li key={index} className="flex items-start">
+                      <span className="mr-2 text-primary">✓</span>
+                      <span>{highlight}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+        
+        <section id="register" className="py-20 bg-secondary/10">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl font-bold mb-12 text-center">Register Now</h2>
+            <RegisterForm />
+          </div>
+        </section>
+        
+        <section id="schedule" className="py-20 bg-background">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl font-bold mb-12 text-center">Event Schedule</h2>
+            
+            <div className="max-w-3xl mx-auto">
+              {schedule.map((day, i) => (
+                <div key={i} className="mb-10">
+                  <h3 className="text-xl font-semibold mb-4 bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">
+                    {day.date}
+                  </h3>
+                  <div className="border border-border/40 rounded-lg overflow-hidden">
+                    {day.events.map((event, j) => (
+                      <div 
+                        key={j} 
+                        className="p-4 flex flex-col sm:flex-row gap-4 sm:items-center border-b border-border/40 last:border-b-0"
+                      >
+                        <div className="w-24 flex-shrink-0 text-primary">{event.time}</div>
+                        <div>
+                          <h4 className="font-medium">{event.name}</h4>
+                          <p className="text-muted-foreground text-sm">{event.description}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+        
+        <section id="faq" className="py-20 bg-secondary/10">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl font-bold mb-12 text-center">Frequently Asked Questions</h2>
+            
+            <div className="max-w-3xl mx-auto grid gap-6">
+              {faqs.map((faq, i) => (
+                <div key={i} className="bg-card rounded-lg p-6 shadow-sm border border-border/40">
+                  <h3 className="text-lg font-medium mb-2">{faq.question}</h3>
+                  <p className="text-muted-foreground">{faq.answer}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      
+      <Footer />
     </div>
   );
 }
+
+// Sample data
+const highlights = [
+  "$50,000 in prizes and scholarships",
+  "Mentorship from industry experts",
+  "Workshops and technical sessions",
+  "Networking opportunities with top companies",
+  "Free food and swag for all participants",
+  "Post-event job and internship opportunities"
+];
+
+const schedule = [
+  {
+    date: "Day 1 - Friday, May 15, 2025",
+    events: [
+      { time: "9:00 AM", name: "Check-in & Registration", description: "Pick up your badge and welcome kit" },
+      { time: "10:00 AM", name: "Opening Ceremony", description: "Welcome address and sponsor introductions" },
+      { time: "11:30 AM", name: "Team Formation", description: "Find teammates and brainstorm ideas" },
+      { time: "12:30 PM", name: "Lunch", description: "Networking lunch with sponsors" },
+      { time: "2:00 PM", name: "Hacking Begins", description: "Start building your amazing projects" },
+      { time: "7:00 PM", name: "Dinner", description: "Refuel for the night ahead" }
+    ]
+  },
+  {
+    date: "Day 2 - Saturday, May 16, 2025",
+    events: [
+      { time: "8:00 AM", name: "Breakfast", description: "Continental breakfast" },
+      { time: "10:00 AM", name: "Workshops", description: "Technical workshops by industry experts" },
+      { time: "12:30 PM", name: "Lunch", description: "Continue hacking through lunch" },
+      { time: "3:00 PM", name: "Mentor Sessions", description: "Get feedback on your projects" },
+      { time: "7:00 PM", name: "Dinner", description: "Special dinner event" }
+    ]
+  },
+  {
+    date: "Day 3 - Sunday, May 17, 2025",
+    events: [
+      { time: "8:00 AM", name: "Breakfast", description: "Last day breakfast" },
+      { time: "11:00 AM", name: "Submission Deadline", description: "Final commit and project submission" },
+      { time: "12:30 PM", name: "Lunch", description: "Pre-judging lunch" },
+      { time: "2:00 PM", name: "Project Expo", description: "Showcase your projects to judges" },
+      { time: "4:00 PM", name: "Closing Ceremony", description: "Awards and celebration" }
+    ]
+  }
+];
+
+const faqs = [
+  {
+    question: "Who can participate in HackXperience?",
+    answer: "HackXperience is open to all students, professionals, and tech enthusiasts. Whether you're a beginner or an experienced developer, everyone is welcome!"
+  },
+  {
+    question: "Do I need to have a team before registering?",
+    answer: "No, you can register individually and form a team during the event. We'll have team formation activities to help you find teammates."
+  },
+  {
+    question: "Is there a registration fee?",
+    answer: "No, HackXperience is completely free to attend. We'll provide food, drinks, and swag during the event."
+  },
+  {
+    question: "What should I bring to the hackathon?",
+    answer: "Bring your laptop, charger, any hardware you want to work with, and your enthusiasm! We'll provide the rest."
+  },
+  {
+    question: "Will there be prizes?",
+    answer: "Yes! We have over $50,000 in prizes across various categories, including Best Overall, Best UI/UX, Most Innovative, and more."
+  },
+  {
+    question: "Can I work on a pre-existing project?",
+    answer: "All projects must be started from scratch at the event. You can come with ideas, but the coding should begin at the hackathon."
+  }
+];
