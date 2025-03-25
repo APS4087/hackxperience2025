@@ -72,9 +72,8 @@ const RegisterSection = dynamic(() => import("@/components/register-section").th
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col">
-      <main className="flex-1">
-
+    <div className="min-h-screen flex flex-col overflow-x-hidden">
+      <main className="flex-1 relative">
         <HeroSection />
         <Suspense fallback={<div className="w-full min-h-[600px] animate-pulse bg-muted/20 rounded-lg" />}>
           <AboutSection />

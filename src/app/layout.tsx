@@ -36,7 +36,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${geistMono.variable} ${eightBitDragon.variable} font-sans antialiased`}
+        className={`${inter.variable} ${geistMono.variable} ${eightBitDragon.variable} font-sans antialiased min-h-screen overflow-x-hidden`}
       >
         <Providers>
           {children}

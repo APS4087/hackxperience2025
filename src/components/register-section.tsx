@@ -14,12 +14,12 @@ const SplineScene = dynamic(() => import('./spline-scene').then(mod => mod.Splin
 
 export function RegisterSection() {
   return (
-    <section id="register" className="py-20 bg-background/5">
+    <section id="register" className="py-20 bg-background/5 relative">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
           {/* 3D Element Container Side */}
           <div className="md:col-span-8 w-full h-[800px] rounded-lg shadow-lg overflow-hidden bg-background/5 relative">
-            <div className="absolute inset-0">
+            <div className="absolute inset-0 w-full h-full">
               <SplineScene />
             </div>
           </div>
