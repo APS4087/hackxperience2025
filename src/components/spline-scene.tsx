@@ -3,7 +3,6 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import type { Application } from "@splinetool/runtime";
 import type { Object3D, PerspectiveCamera, WebGLRenderer, Scene } from "three";
-import dynamic from 'next/dynamic';
 import Spline from '@splinetool/react-spline';
 
 interface SplineApplication extends Application {
