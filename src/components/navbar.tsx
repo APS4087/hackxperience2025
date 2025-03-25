@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import NavbarButton from "./NavbarButton";
 import NavbarContent from "./NavbarContent";
 import "./Navbar.css";
@@ -10,18 +10,19 @@ export function Navbar() {
     typeof window !== "undefined" ? window.innerWidth > 768 : false
   );
   const menuRef = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = useReducedMotion();
+
+  const handleResize = useCallback(() => {
+    setIsLargeScreen(window.innerWidth > 768);
+  }, []);
+
+  const handleClickOutside = useCallback((event: MouseEvent) => {
+    if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+      setIsOpen(false);
+    }
+  }, []);
 
   useEffect(() => {
-    const handleResize = () => {
-      setIsLargeScreen(window.innerWidth > 768);
-    };
-
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-
     window.addEventListener("resize", handleResize);
     document.addEventListener("mousedown", handleClickOutside);
     
@@ -29,7 +30,7 @@ export function Navbar() {
       window.removeEventListener("resize", handleResize);
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [handleResize, handleClickOutside]);
 
   const variants = {
     closed: {
@@ -38,7 +39,7 @@ export function Navbar() {
       top: isLargeScreen ? "50px" : "25px",
       left: isLargeScreen ? "50px" : "25px",
       scale: 1,
-      transition: {
+      transition: prefersReducedMotion ? { duration: 0 } : {
         duration: 0.75,
         type: "tween",
         ease: [0.76, 0, 0.24, 1],
@@ -51,7 +52,7 @@ export function Navbar() {
       top: isLargeScreen ? "25px" : "15px",
       left: isLargeScreen ? "25px" : "15px",
       scale: 1,
-      transition: {
+      transition: prefersReducedMotion ? { duration: 0 } : {
         duration: 0.75,
         type: "tween",
         ease: [0.76, 0, 0.24, 1],

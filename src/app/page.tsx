@@ -1,9 +1,9 @@
 "use client";
 
 import { HeroSection } from "@/components/hero-section";
-import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import dynamic from 'next/dynamic';
+import { Suspense } from 'react';
 
 // Lazy load sections that are not immediately visible
 const AboutSection = dynamic(() => import("@/components/about-section").then(mod => mod.AboutSection), {
@@ -18,7 +18,8 @@ const AboutSection = dynamic(() => import("@/components/about-section").then(mod
         </div>
       </div>
     </div>
-  )
+  ),
+  ssr: false
 });
 
 const ScheduleSection = dynamic(() => import("@/components/schedule-section").then(mod => mod.ScheduleSection), {
@@ -33,7 +34,8 @@ const ScheduleSection = dynamic(() => import("@/components/schedule-section").th
         </div>
       </div>
     </div>
-  )
+  ),
+  ssr: false
 });
 
 const FAQSection = dynamic(() => import("@/components/faq-section").then(mod => mod.FAQSection), {
@@ -48,7 +50,8 @@ const FAQSection = dynamic(() => import("@/components/faq-section").then(mod => 
         </div>
       </div>
     </div>
-  )
+  ),
+  ssr: false
 });
 
 const RegisterSection = dynamic(() => import("@/components/register-section").then(mod => mod.RegisterSection), {
@@ -63,20 +66,27 @@ const RegisterSection = dynamic(() => import("@/components/register-section").th
         </div>
       </div>
     </div>
-  )
+  ),
+  ssr: false
 });
 
 export default function Home() {
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
-      
       <main className="flex-1">
         <HeroSection />
-        <AboutSection />
-        <RegisterSection />
-        <ScheduleSection />
-        <FAQSection />
+        <Suspense fallback={<div className="w-full min-h-[600px] animate-pulse bg-muted/20 rounded-lg" />}>
+          <AboutSection />
+        </Suspense>
+        <Suspense fallback={<div className="w-full min-h-[600px] animate-pulse bg-muted/20 rounded-lg" />}>
+          <RegisterSection />
+        </Suspense>
+        <Suspense fallback={<div className="w-full min-h-[600px] animate-pulse bg-muted/20 rounded-lg" />}>
+          <ScheduleSection />
+        </Suspense>
+        <Suspense fallback={<div className="w-full min-h-[600px] animate-pulse bg-muted/20 rounded-lg" />}>
+          <FAQSection />
+        </Suspense>
       </main>
       
       <Footer />

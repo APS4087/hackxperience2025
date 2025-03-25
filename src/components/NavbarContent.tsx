@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import "./NavbarContent.css";
 
 interface NavbarContentProps {
@@ -6,6 +6,7 @@ interface NavbarContentProps {
 }
 
 const NavbarContent = ({ isLargeScreen }: NavbarContentProps) => {
+  const prefersReducedMotion = useReducedMotion();
   const navPages = [
     { page: "home", href: "/" },
     { page: "about", href: "#about" },
@@ -33,7 +34,7 @@ const NavbarContent = ({ isLargeScreen }: NavbarContentProps) => {
       rotateX: 0,
       translateX: 0,
       translateY: 0,
-      transition: {
+      transition: prefersReducedMotion ? { duration: 0 } : {
         delay: 0.5 + (index * 0.1),
         duration: 0.65,
         ease: [.215, .61, .355, 1]
@@ -41,8 +42,10 @@ const NavbarContent = ({ isLargeScreen }: NavbarContentProps) => {
     }),
     exit: (index: number) => ({
       opacity: 0,
-      transition: { delay: (index * 0.1) },
-      ease: [0.76, 0, 0.24, 1]
+      transition: prefersReducedMotion ? { duration: 0 } : { 
+        delay: (index * 0.1),
+        ease: [0.76, 0, 0.24, 1]
+      },
     }),
   };
 
