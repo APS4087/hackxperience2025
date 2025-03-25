@@ -20,7 +20,9 @@ export function RegisterSection() {
           {/* 3D Element Container Side */}
           <div className="md:col-span-8">
             <div className="w-full h-[800px] rounded-lg shadow-lg bg-background/5 relative overflow-hidden">
-              <SplineScene />
+              <div className="absolute inset-0 w-full h-full">
+                <SplineScene />
+              </div>
             </div>
           </div>
 
