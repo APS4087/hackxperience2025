@@ -16,19 +16,12 @@ export function SplineScene() {
   const [error, setError] = useState<string | null>(null);
   const [webglSupported, setWebglSupported] = useState(true);
   const [isClient, setIsClient] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
   const splineRef = useRef<SplineApplication | null>(null);
   const resizeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Check if we're on the client side and determine if mobile
+  // Check if we're on the client side
   useEffect(() => {
     setIsClient(true);
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768); // Standard mobile breakpoint
-    };
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   // Check WebGL support
@@ -111,11 +104,6 @@ export function SplineScene() {
           };
           
           animate();
-          
-          // Cleanup animation frame on unmount
-          return () => {
-            cancelAnimationFrame(animationFrameId);
-          };
         }
       }
 
@@ -188,10 +176,7 @@ export function SplineScene() {
     <div className="w-full h-full relative">
       <div className="absolute inset-0">
         <Spline
-          scene={isMobile 
-            ? "https://prod.spline.design/AEd1GavRwPvkvCek/scene.splinecode"
-            : "https://prod.spline.design/74fW6bD1V-Mk2IUW/scene.splinecode"
-          }
+          scene="https://prod.spline.design/74fW6bD1V-Mk2IUW/scene.splinecode"
           onLoad={onLoad}
           style={{
             background: 'transparent',
