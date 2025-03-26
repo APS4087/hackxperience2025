@@ -181,7 +181,7 @@ export function SplineScene() {
     <div className="w-full h-full relative">
       <div className="absolute inset-0">
         <Spline
-          scene="https://prod.spline.design/74fW6bD1V-Mk2IUW/scene.splinecode"
+          scene="https://prod.spline.design/AEd1GavRwPvkvCek/scene.splinecode"
           onLoad={onLoad}
           style={{
             background: 'transparent',
