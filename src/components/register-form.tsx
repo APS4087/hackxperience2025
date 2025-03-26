@@ -133,10 +133,8 @@ export function RegisterForm() {
   }, [formData, validateEmail]);
   
   const handleSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>) => {
-    if (e instanceof Event) {
-      e.preventDefault();
-    }
-
+    e.preventDefault();
+    
     if (!validateForm()) {
       return;
     }
@@ -153,6 +151,20 @@ export function RegisterForm() {
 
       if (existingUser) {
         setLoading(false);
+        showToast.error("This email is already registered. Please use a different email address.");
+        return;
+      }
+
+      // Check if SIM ID is already registered
+      const { data: existingSIMID } = await supabase
+        .from('registrations')
+        .select('id')
+        .eq('sim_id', formData.sim_id)
+        .single();
+
+      if (existingSIMID) {
+        setLoading(false);
+        showToast.error("This SIM ID is already registered. Please check your ID or contact support if you think this is an error.");
         return;
       }
 
@@ -160,8 +172,13 @@ export function RegisterForm() {
       if (formData.has_team && !formData.is_team_lead && formData.team_lead_email) {
         try {
           await validateTeamLeadEmail(formData.team_lead_email);
-        } catch {
+        } catch (error) {
           setLoading(false);
+          if (error instanceof Error) {
+            showToast.error(error.message);
+          } else {
+            showToast.error("Error validating team lead email. Please try again.");
+          }
           return;
         }
       }
@@ -176,6 +193,7 @@ export function RegisterForm() {
 
         if (existingTeam) {
           setLoading(false);
+          showToast.error("This team name is already taken. Please choose a different team name.");
           return;
         }
       }
@@ -198,7 +216,10 @@ export function RegisterForm() {
         
       if (insertError) throw insertError;
       
-      showToast.success("Registration successful! Welcome to HackXperience 2025!");
+      showToast.success("Registration successful!");
+      setTimeout(() => {
+        showToast.success("Welcome to HackXperience 2025!");
+      }, 1000);
       // Reset form
       setFormData({
         full_name: '',
@@ -213,9 +234,27 @@ export function RegisterForm() {
     } catch (error) {
       console.error("Registration error:", error);
       if (error instanceof Error) {
-        console.error("Registration error:", error);
+        showToast.error(error.message);
+      } else if (typeof error === 'object' && error !== null && 'code' in error) {
+        // Handle specific database errors
+        const dbError = error as { code: string; message: string; details: string };
+        switch (dbError.code) {
+          case '23505': // Unique constraint violation
+            if (dbError.details?.includes('sim_id')) {
+              showToast.error("This SIM ID is already registered. Please check your ID or contact support if you think this is an error.");
+            } else if (dbError.details?.includes('email')) {
+              showToast.error("This email is already registered. Please use a different email address.");
+            } else if (dbError.details?.includes('team_name')) {
+              showToast.error("This team name is already taken. Please choose a different team name.");
+            } else {
+              showToast.error("A registration with this information already exists.");
+            }
+            break;
+          default:
+            showToast.error("Error submitting registration. Please try again.");
+        }
       } else {
-        console.error("Error submitting registration. Please try again.");
+        showToast.error("Error submitting registration. Please try again.");
       }
     } finally {
       setLoading(false);

@@ -134,6 +134,9 @@ export function HeroSection() {
               alt="HackXperience Hero"
               fill
               priority
+              sizes="(max-width: 640px) 100vw, 50vw"
+              quality={75}
+              loading="eager"
               className="object-cover rounded-xl sm:rounded-2xl"
               style={{
                 backfaceVisibility: 'hidden',
