@@ -113,6 +113,7 @@ export function HeroSection() {
             playsInline
             muted
             preload="auto"
+            poster="/img/hero.jpg"
             className={`absolute inset-0 w-full h-full object-cover rounded-xl sm:rounded-2xl ${!isVideoLoaded ? 'invisible' : ''}`}
             style={{
               backfaceVisibility: 'hidden',
