@@ -35,10 +35,17 @@ export function HeroSection() {
     if (!currentVideo) return;
 
     if (isVideoVisible) {
-      currentVideo.play()
-        .catch((error) => {
+      const playVideo = async () => {
+        try {
+          // Set muted state explicitly for mobile autoplay
+          currentVideo.muted = true;
+          setIsMuted(true);
+          await currentVideo.play();
+        } catch (error) {
           console.log("Video playback failed:", error);
-        });
+        }
+      };
+      playVideo();
     } else {
       currentVideo.pause();
     }
@@ -48,6 +55,16 @@ export function HeroSection() {
     if (videoRef.current) {
       videoRef.current.muted = !videoRef.current.muted;
       setIsMuted(!isMuted);
+      
+      // If unmuting, ensure video is playing
+      if (!videoRef.current.muted && videoRef.current.paused) {
+        videoRef.current.play().catch(error => {
+          console.log("Video playback failed:", error);
+          // Revert to muted state if unmuted playback fails
+          videoRef.current!.muted = true;
+          setIsMuted(true);
+        });
+      }
     }
   };
 
@@ -71,7 +88,7 @@ export function HeroSection() {
             loop
             playsInline
             muted
-            preload="metadata"
+            preload="auto"
             poster="/vids/poster-frame.jpg"
             className="absolute inset-0 w-full h-full object-cover rounded-xl sm:rounded-2xl"
             style={{
