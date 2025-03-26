@@ -7,6 +7,7 @@ export function HeroSection() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isMuted, setIsMuted] = useState(true);
   const [isVideoVisible, setIsVideoVisible] = useState(false);
+  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -51,6 +52,29 @@ export function HeroSection() {
     }
   }, [isVideoVisible]);
 
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const handleLoadedData = () => {
+      setIsVideoLoaded(true);
+      console.log("Video loaded successfully");
+    };
+
+    const handleError = (e: Event) => {
+      console.error("Video loading error:", (e as ErrorEvent).message);
+      setIsVideoLoaded(false);
+    };
+
+    video.addEventListener('loadeddata', handleLoadedData);
+    video.addEventListener('error', handleError);
+
+    return () => {
+      video.removeEventListener('loadeddata', handleLoadedData);
+      video.removeEventListener('error', handleError);
+    };
+  }, []);
+
   const toggleMute = () => {
     if (videoRef.current) {
       videoRef.current.muted = !videoRef.current.muted;
@@ -89,23 +113,22 @@ export function HeroSection() {
             playsInline
             muted
             preload="auto"
-            poster="/vids/poster-frame.jpg"
-            className="absolute inset-0 w-full h-full object-cover rounded-xl sm:rounded-2xl"
+            className={`absolute inset-0 w-full h-full object-cover rounded-xl sm:rounded-2xl ${!isVideoLoaded ? 'invisible' : ''}`}
             style={{
               backfaceVisibility: 'hidden',
               transform: 'translateZ(0)',
               willChange: 'transform'
             }}
+            onLoadStart={() => console.log("Video load started")}
           >
-            <source 
-              src="/vids/simitc2024-hackathon.mp4" 
-              type="video/mp4"
-              media="(min-width: 640px)"
-            />
             <source 
               src="/vids/simitc2024-hackathon-mobile.mp4" 
               type="video/mp4"
               media="(max-width: 639px)"
+            />
+            <source 
+              src="/vids/simitc2024-hackathon.mp4" 
+              type="video/mp4"
             />
             Your browser does not support the video tag.
           </video>
