@@ -3,70 +3,53 @@
 import { HeroSection } from "@/components/hero-section";
 import { Footer } from "@/components/footer";
 import dynamic from 'next/dynamic';
-import { Suspense } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 
-// Lazy load sections that are not immediately visible
-const AboutSection = dynamic(() => import("@/components/about-section").then(mod => mod.AboutSection), {
-  loading: () => (
-    <div className="w-full min-h-[600px] animate-pulse bg-muted/20 rounded-lg">
+// Custom loading components with reduced animation when reduced motion is preferred
+function LoadingSection({ className = "" }: { className?: string }) {
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReducedMotion(mediaQuery.matches);
+
+    const handleChange = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
+
+  return (
+    <div className={`w-full min-h-[600px] ${prefersReducedMotion ? 'bg-muted/20' : 'animate-pulse bg-muted/20'} rounded-lg ${className}`}>
       <div className="container mx-auto px-4 py-16">
-        <div className="h-8 w-48 bg-muted/40 rounded mb-8" />
+        <div className={`h-8 w-48 bg-muted/40 rounded mb-8 ${!prefersReducedMotion && 'animate-pulse'}`} />
         <div className="space-y-4">
-          <div className="h-4 w-full bg-muted/40 rounded" />
-          <div className="h-4 w-3/4 bg-muted/40 rounded" />
-          <div className="h-4 w-1/2 bg-muted/40 rounded" />
+          <div className={`h-4 w-full bg-muted/40 rounded ${!prefersReducedMotion && 'animate-pulse'}`} />
+          <div className={`h-4 w-3/4 bg-muted/40 rounded ${!prefersReducedMotion && 'animate-pulse'}`} />
+          <div className={`h-4 w-1/2 bg-muted/40 rounded ${!prefersReducedMotion && 'animate-pulse'}`} />
         </div>
       </div>
     </div>
-  ),
+  );
+}
+
+// Lazy load sections with custom loading states
+const AboutSection = dynamic(() => import("@/components/about-section").then(mod => mod.AboutSection), {
+  loading: () => <LoadingSection />,
   ssr: false
 });
 
 const ScheduleSection = dynamic(() => import("@/components/schedule-section").then(mod => mod.ScheduleSection), {
-  loading: () => (
-    <div className="w-full min-h-[600px] animate-pulse bg-muted/20 rounded-lg">
-      <div className="container mx-auto px-4 py-16">
-        <div className="h-8 w-48 bg-muted/40 rounded mb-8" />
-        <div className="grid gap-4 md:grid-cols-2">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="h-32 bg-muted/40 rounded" />
-          ))}
-        </div>
-      </div>
-    </div>
-  ),
+  loading: () => <LoadingSection />,
   ssr: false
 });
 
 const FAQSection = dynamic(() => import("@/components/faq-section").then(mod => mod.FAQSection), {
-  loading: () => (
-    <div className="w-full min-h-[600px] animate-pulse bg-muted/20 rounded-lg">
-      <div className="container mx-auto px-4 py-16">
-        <div className="h-8 w-48 bg-muted/40 rounded mb-8" />
-        <div className="space-y-4">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="h-16 bg-muted/40 rounded" />
-          ))}
-        </div>
-      </div>
-    </div>
-  ),
+  loading: () => <LoadingSection />,
   ssr: false
 });
 
 const RegisterSection = dynamic(() => import("@/components/register-section").then(mod => mod.RegisterSection), {
-  loading: () => (
-    <div className="w-full min-h-[600px] animate-pulse bg-muted/20 rounded-lg">
-      <div className="container mx-auto px-4 py-16">
-        <div className="h-8 w-48 bg-muted/40 rounded mb-8" />
-        <div className="max-w-md mx-auto">
-          <div className="h-12 bg-muted/40 rounded mb-4" />
-          <div className="h-12 bg-muted/40 rounded mb-4" />
-          <div className="h-12 bg-muted/40 rounded" />
-        </div>
-      </div>
-    </div>
-  ),
+  loading: () => <LoadingSection />,
   ssr: false
 });
 
@@ -74,17 +57,23 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col overflow-x-hidden">
       <main className="flex-1 relative">
-        <HeroSection />
-        <Suspense fallback={<div className="w-full min-h-[600px] animate-pulse bg-muted/20 rounded-lg" />}>
+        <Suspense fallback={<LoadingSection className="mt-4" />}>
+          <HeroSection />
+        </Suspense>
+        
+        <Suspense fallback={<LoadingSection />}>
           <AboutSection />
         </Suspense>
-        <Suspense fallback={<div className="w-full min-h-[600px] animate-pulse bg-muted/20 rounded-lg" />}>
+        
+        <Suspense fallback={<LoadingSection />}>
           <RegisterSection />
         </Suspense>
-        <Suspense fallback={<div className="w-full min-h-[600px] animate-pulse bg-muted/20 rounded-lg" />}>
+        
+        <Suspense fallback={<LoadingSection />}>
           <ScheduleSection />
         </Suspense>
-        <Suspense fallback={<div className="w-full min-h-[600px] animate-pulse bg-muted/20 rounded-lg" />}>
+        
+        <Suspense fallback={<LoadingSection />}>
           <FAQSection />
         </Suspense>
       </main>

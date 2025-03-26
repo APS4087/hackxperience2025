@@ -6,15 +6,43 @@ import { Volume2, VolumeX } from "lucide-react";
 export function HeroSection() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isMuted, setIsMuted] = useState(true);
+  const [isVideoVisible, setIsVideoVisible] = useState(false);
 
   useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.play()
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsVideoVisible(entry.isIntersecting);
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    const currentVideo = videoRef.current;
+    if (currentVideo) {
+      observer.observe(currentVideo);
+    }
+
+    return () => {
+      if (currentVideo) {
+        observer.unobserve(currentVideo);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const currentVideo = videoRef.current;
+    if (!currentVideo) return;
+
+    if (isVideoVisible) {
+      currentVideo.play()
         .catch((error) => {
           console.log("Video playback failed:", error);
         });
+    } else {
+      currentVideo.pause();
     }
-  }, []);
+  }, [isVideoVisible]);
 
   const toggleMute = () => {
     if (videoRef.current) {
@@ -43,9 +71,25 @@ export function HeroSection() {
             loop
             playsInline
             muted
+            preload="metadata"
+            poster="/vids/poster-frame.jpg"
             className="absolute inset-0 w-full h-full object-cover rounded-xl sm:rounded-2xl"
+            style={{
+              backfaceVisibility: 'hidden',
+              transform: 'translateZ(0)',
+              willChange: 'transform'
+            }}
           >
-            <source src="/vids/simitc2024-hackathon.mp4" type="video/mp4" />
+            <source 
+              src="/vids/simitc2024-hackathon.mp4" 
+              type="video/mp4"
+              media="(min-width: 640px)"
+            />
+            <source 
+              src="/vids/simitc2024-hackathon-mobile.mp4" 
+              type="video/mp4"
+              media="(max-width: 639px)"
+            />
             Your browser does not support the video tag.
           </video>
           <button

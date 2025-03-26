@@ -75,24 +75,40 @@ export function SplineScene() {
         const container = canvas?.parentElement;
         if (container) {
           const { width, height } = container.getBoundingClientRect();
-          // Set size with device pixel ratio
-          const pixelRatio = Math.min(window.devicePixelRatio, 2);
+          // Set size with lower pixel ratio for better performance
+          const pixelRatio = Math.min(window.devicePixelRatio, 1.5);
           splineApp.renderer.setPixelRatio(pixelRatio);
           splineApp.renderer.setSize(width, height, false);
+          
+          // Optimize renderer settings
+          splineApp.renderer.shadowMap.enabled = false; // Disable shadows for better performance
+          splineApp.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5)); // Limit pixel ratio
           
           // Force a resize event to ensure proper sizing
           window.dispatchEvent(new Event('resize'));
         }
         
-        // Only set up animation loop if WebGL is supported
+        // Only set up animation loop if WebGL is supported and element is visible
         if (webglSupported) {
-          splineApp.renderer.setAnimationLoop(() => {
-            if (document.hidden) {
-              splineApp.renderer?.setAnimationLoop(null);
-            } else if (splineApp.scene && splineApp.camera && splineApp.renderer) {
+          let animationFrameId: number;
+          const animate = () => {
+            if (document.hidden || !splineRef.current) {
+              cancelAnimationFrame(animationFrameId);
+              return;
+            }
+            
+            if (splineApp.scene && splineApp.camera && splineApp.renderer) {
               splineApp.renderer.render(splineApp.scene, splineApp.camera);
             }
-          });
+            animationFrameId = requestAnimationFrame(animate);
+          };
+          
+          animate();
+          
+          // Cleanup animation frame on unmount
+          return () => {
+            cancelAnimationFrame(animationFrameId);
+          };
         }
       }
 

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import NavbarButton from "./NavbarButton";
 import NavbarContent from "./NavbarContent";
@@ -6,33 +6,35 @@ import "./Navbar.css";
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isLargeScreen, setIsLargeScreen] = useState(
-    typeof window !== "undefined" ? window.innerWidth > 768 : false
-  );
   const menuRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
+  const [isLargeScreen, setIsLargeScreen] = useState(false);
 
-  const handleResize = useCallback(() => {
-    setIsLargeScreen(window.innerWidth > 768);
-  }, []);
-
-  const handleClickOutside = useCallback((event: MouseEvent) => {
-    if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-      setIsOpen(false);
-    }
-  }, []);
-
+  // Memoize screen size check to reduce unnecessary re-renders
   useEffect(() => {
-    window.addEventListener("resize", handleResize);
-    document.addEventListener("mousedown", handleClickOutside);
-    
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      document.removeEventListener("mousedown", handleClickOutside);
+    const checkScreenSize = () => {
+      setIsLargeScreen(window.innerWidth >= 768);
     };
-  }, [handleResize, handleClickOutside]);
 
-  const variants = {
+    // Initial check
+    checkScreenSize();
+
+    // Debounced resize handler
+    let timeoutId: NodeJS.Timeout;
+    const debouncedResize = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(checkScreenSize, 100);
+    };
+
+    window.addEventListener('resize', debouncedResize);
+    return () => {
+      window.removeEventListener('resize', debouncedResize);
+      clearTimeout(timeoutId);
+    };
+  }, []);
+
+  // Memoize variants to prevent unnecessary recalculations
+  const variants = useMemo(() => ({
     closed: {
       width: isLargeScreen ? "100px" : "80px",
       height: isLargeScreen ? "40px" : "35px",
@@ -59,7 +61,21 @@ export function Navbar() {
         when: "beforeChildren"
       }
     }
-  };
+  }), [isLargeScreen, prefersReducedMotion]);
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isOpen]);
 
   return (
     <header className="navbar">
@@ -69,6 +85,7 @@ export function Navbar() {
         initial="closed"
         animate={isOpen ? "open" : "closed"}
         className="navbarMainDiv"
+        layout
       >
         <NavbarButton isOpen={isOpen} setIsOpen={setIsOpen} />
         <AnimatePresence mode="wait">
