@@ -53,26 +53,30 @@ const RegisterSection = dynamic(() => import("@/components/register-section").th
   ssr: false
 });
 
+const ReadySection = dynamic(() => import("@/components/ready-section").then(mod => mod.ReadySection), {
+  loading: () => <LoadingSection />,
+  ssr: false
+});
+
 export default function Home() {
   return (
     <div className="min-h-screen flex flex-col overflow-x-hidden">
       <main className="flex-1 relative">
         <Suspense fallback={<LoadingSection className="mt-4" />}>
           <HeroSection />
-        </Suspense>
-        
+        </Suspense>  
         <Suspense fallback={<LoadingSection />}>
           <AboutSection />
         </Suspense>
-        
-        <Suspense fallback={<LoadingSection />}>
-          <RegisterSection />
-        </Suspense>
-        
         <Suspense fallback={<LoadingSection />}>
           <ScheduleSection />
         </Suspense>
-        
+        <Suspense fallback={<LoadingSection />}>
+          <ReadySection />
+        </Suspense>
+        <Suspense fallback={<LoadingSection />}>
+          <RegisterSection />
+        </Suspense>
         <Suspense fallback={<LoadingSection />}>
           <FAQSection />
         </Suspense>
