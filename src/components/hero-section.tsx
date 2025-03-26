@@ -2,12 +2,33 @@
 import React, { useRef, useState, useEffect } from "react";
 import { ContainerScroll } from "@/components/ui/container-scroll-animation";
 import { Volume2, VolumeX } from "lucide-react";
+import Image from "next/image";
+
+// Custom hook for media query
+function useMediaQuery(query: string) {
+  const [matches, setMatches] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia(query);
+    const updateMatch = () => setMatches(media.matches);
+    
+    // Initial check
+    updateMatch();
+    
+    // Listen for changes
+    media.addEventListener('change', updateMatch);
+    return () => media.removeEventListener('change', updateMatch);
+  }, [query]);
+
+  return matches;
+}
 
 export function HeroSection() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isMuted, setIsMuted] = useState(true);
   const [isVideoVisible, setIsVideoVisible] = useState(false);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+  const isMobile = useMediaQuery('(max-width: 639px)');
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -107,43 +128,55 @@ export function HeroSection() {
         }
       >
         <div className="relative w-full h-full px-4 sm:px-0">
-          <video
-            ref={videoRef}
-            loop
-            playsInline
-            muted
-            preload="auto"
-            poster="/img/hero.jpg"
-            className={`absolute inset-0 w-full h-full object-cover rounded-xl sm:rounded-2xl ${!isVideoLoaded ? 'invisible' : ''}`}
-            style={{
-              backfaceVisibility: 'hidden',
-              transform: 'translateZ(0)',
-              willChange: 'transform'
-            }}
-            onLoadStart={() => console.log("Video load started")}
-          >
-            <source 
-              src="/vids/simitc2024-hackathon-mobile.mp4" 
-              type="video/mp4"
-              media="(max-width: 639px)"
+          {isMobile ? (
+            <Image
+              src="/img/hero.jpg"
+              alt="HackXperience Hero"
+              fill
+              priority
+              className="object-cover rounded-xl sm:rounded-2xl"
+              style={{
+                backfaceVisibility: 'hidden',
+                transform: 'translateZ(0)',
+                willChange: 'transform'
+              }}
             />
-            <source 
-              src="/vids/simitc2024-hackathon.mp4" 
-              type="video/mp4"
-            />
-            Your browser does not support the video tag.
-          </video>
-          <button
-            onClick={toggleMute}
-            className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 p-1.5 sm:p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors z-10"
-            aria-label={isMuted ? "Unmute video" : "Mute video"}
-          >
-            {isMuted ? (
-              <VolumeX className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-            ) : (
-              <Volume2 className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-            )}
-          </button>
+          ) : (
+            <>
+              <video
+                ref={videoRef}
+                loop
+                playsInline
+                muted
+                preload="auto"
+                poster="/img/hero.jpg"
+                className={`absolute inset-0 w-full h-full object-cover rounded-xl sm:rounded-2xl ${!isVideoLoaded ? 'invisible' : ''}`}
+                style={{
+                  backfaceVisibility: 'hidden',
+                  transform: 'translateZ(0)',
+                  willChange: 'transform'
+                }}
+                onLoadStart={() => console.log("Video load started")}
+              >
+                <source 
+                  src="/vids/simitc2024-hackathon.mp4" 
+                  type="video/mp4"
+                />
+                Your browser does not support the video tag.
+              </video>
+              <button
+                onClick={toggleMute}
+                className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 p-1.5 sm:p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors z-10"
+                aria-label={isMuted ? "Unmute video" : "Mute video"}
+              >
+                {isMuted ? (
+                  <VolumeX className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                ) : (
+                  <Volume2 className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                )}
+              </button>
+            </>
+          )}
         </div>
       </ContainerScroll>
     </div>
