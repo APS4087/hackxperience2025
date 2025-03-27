@@ -95,8 +95,8 @@ const PartnerCard = ({
           className="text-center w-full mx-auto flex flex-col items-center justify-center gap-2"
         >
           <h2 className="text-2xl font-bold">{title}</h2>
-          <p className="text-sm text-muted-foreground md:hidden">Tap to teaser</p>
-          <p className="text-sm text-muted-foreground hidden md:block">Hover to teaser</p>
+          <p className="text-sm text-muted-foreground md:hidden">Tap & Hold for teaser</p>
+          <p className="text-sm text-muted-foreground hidden md:block">Hover for teaser</p>
         </motion.div>
       </div>
     </div>
