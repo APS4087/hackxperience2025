@@ -1,57 +1,255 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { ChevronDown, Clock, Folder as FolderIcon, FileCode, FileCog, FileText, Terminal, MapPin, FileJson, FileType, Presentation } from 'lucide-react';
 
+// Convert events to file-like structure
 const schedule = [
   {
-    date: "Day 1 - April 11",
+    date: "Day 1",
     events: [
-      { time: "9:00 AM", name: "Check-in & Registration", description: "Pick up your badge and welcome kit" },
-      { time: "10:00 AM", name: "Opening Ceremony", description: "Welcome address and sponsor introductions" },
-      { time: "11:30 AM", name: "Team Formation", description: "Find teammates and brainstorm ideas" },
-      { time: "12:30 PM", name: "Lunch", description: "Networking lunch with sponsors" },
-      { time: "2:00 PM", name: "Hacking Begins", description: "Start building your amazing projects" },
-      { time: "7:00 PM", name: "Dinner", description: "Refuel for the night ahead" }
+      {
+        time: "11:30",
+        name: "venue-open.sh",
+        type: "script",
+        description: "Venue Open",
+        venue: "LT B.2.17"
+      },
+      {
+        time: "12:30",
+        name: "introduction.md",
+        type: "doc",
+        description: "Introduction",
+        venue: "LT B.2.17"
+      },
+      {
+        time: "13:00",
+        name: "hackathon-briefing.jsx",
+        type: "component",
+        description: "Hackathon Briefing & Workshop",
+        venue: "LT B.2.17"
+      },
+      {
+        time: "14:30",
+        name: "team-formation.js",
+        type: "script",
+        description: "Team Formation",
+        venue: "LT B.2.17"
+      },
+      {
+        time: "15:00",
+        name: "team-registration.sh",
+        type: "script",
+        description: "Team Registration",
+        venue: "PAT Foyer"
+      },
+      {
+        time: "15:30",
+        name: "hacking-session-1.py",
+        type: "script",
+        description: "Hacking Time",
+        venue: "PAT Foyer"
+      },
+      {
+        time: "18:00",
+        name: "dinner.yaml",
+        type: "config",
+        description: "Dinner Collection",
+        venue: "PAT Foyer"
+      },
+      {
+        time: "18:00",
+        name: "hacking-session-2.py",
+        type: "script",
+        description: "Hacking Time",
+        venue: "PAT Foyer"
+      }
     ]
   },
   {
-    date: "Day 2 - April 12",
+    date: "Day 2",
     events: [
-      { time: "8:00 AM", name: "Breakfast", description: "Continental breakfast" },
-      { time: "10:00 AM", name: "Workshops", description: "Technical workshops by industry experts" },
-      { time: "12:30 PM", name: "Lunch", description: "Continue hacking through lunch" },
-      { time: "3:00 PM", name: "Mentor Sessions", description: "Get feedback on your projects" },
-      { time: "7:00 PM", name: "Dinner", description: "Special dinner event" }
+      {
+        time: "08:30",
+        name: "venue-open-day2.sh",
+        type: "script",
+        description: "Venue Open",
+        venue: "PAT Foyer"
+      },
+      {
+        time: "08:30",
+        name: "hacking-session-3.py",
+        type: "script",
+        description: "Hacking Time",
+        venue: "PAT Foyer"
+      },
+      {
+        time: "11:30",
+        name: "lunch.yaml",
+        type: "config",
+        description: "Lunch Collection",
+        venue: "PAT Foyer"
+      },
+      {
+        time: "11:30",
+        name: "hacking-session-4.py",
+        type: "script",
+        description: "Hacking Time",
+        venue: "PAT Foyer"
+      },
+      {
+        time: "15:00",
+        name: "submission.md",
+        type: "doc",
+        description: "Submission",
+        venue: "PAT Foyer"
+      },
+      {
+        time: "15:10",
+        name: "presentation.pptx",
+        type: "doc",
+        description: "Presentation + Judging",
+        venue: "PAT Foyer"
+      },
+      {
+        time: "17:00",
+        name: "panel-talk.md",
+        type: "doc",
+        description: "Panel Talk",
+        venue: "PAT Foyer"
+      },
+      {
+        time: "17:30",
+        name: "closing.ceremony",
+        type: "component",
+        description: "Awarding, Closing, Networking",
+        venue: "PAT Foyer"
+      },
     ]
   }
 ];
 
-export function ScheduleSection() {
+interface FileProps {
+  name: string;
+  time: string;
+  description: string;
+  type: string;
+  venue: string;
+}
+
+const getFileIcon = (type: string, name: string) => {
+  const fileExtension = type.toLowerCase();
+  switch (fileExtension) {
+    case 'script':
+      if (name.endsWith('.sh')) {
+        return <Terminal className="h-4 w-4 sm:h-5 sm:w-5 text-green-500/70" />;
+      } else if (name.endsWith('.py')) {
+        return <FileCode className="h-4 w-4 sm:h-5 sm:w-5 text-blue-500/70" />;
+      } else if (name.endsWith('.js')) {
+        return <FileJson className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-500/70" />;
+      }
+      return <Terminal className="h-4 w-4 sm:h-5 sm:w-5 text-green-500/70" />;
+    case 'config':
+      return <FileCog className="h-4 w-4 sm:h-5 sm:w-5 text-blue-500/70" />;
+    case 'component':
+      return <FileCode className="h-4 w-4 sm:h-5 sm:w-5 text-purple-500/70" />;
+    case 'doc':
+      if (name.endsWith('.pptx')) {
+        return <Presentation className="h-4 w-4 sm:h-5 sm:w-5 text-red-500/70" />;
+      } else if (name.endsWith('.md')) {
+        return <FileText className="h-4 w-4 sm:h-5 sm:w-5 text-blue-500/70" />;
+      }
+      return <FileType className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500/70" />;
+    default:
+      return <FileText className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500/70" />;
+  }
+};
+
+const File: React.FC<FileProps> = ({ name, time, description, type, venue }) => {
   return (
-    <section id="schedule" className="py-20 bg-background">
-      <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold mb-12 text-center">Event Schedule</h2>
-        
-        <div className="max-w-3xl mx-auto">
-          {schedule.map((day, i) => (
-            <div key={i} className="mb-10">
-              <h3 className="text-xl font-bold mb-4 bg-gradient-to-r from-primary to-red-500 bg-clip-text text-transparent">
-                {day.date}
-              </h3>
-              <div className="border border-border/40 rounded-lg overflow-hidden">
-                {day.events.map((event, j) => (
-                  <div 
-                    key={j} 
-                    className="p-4 flex flex-col sm:flex-row gap-4 sm:items-center border-b border-border/40 last:border-b-0"
-                  >
-                    <div className="w-24 flex-shrink-0 text-primary">{event.time}</div>
-                    <div>
-                      <h4 className="font-medium">{event.name}</h4>
-                      <p className="text-muted-foreground text-sm">{event.description}</p>
-                    </div>
-                  </div>
-                ))}
+    <div className="group/file py-1 sm:py-1.5">
+      <div className="flex items-start gap-2 sm:gap-3 p-1.5 sm:p-2.5 hover:bg-[#37373d] rounded-sm transition-all duration-200 ease-in-out cursor-pointer">
+        <div className="flex-shrink-0 mt-1">
+          {getFileIcon(type, name)}
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
+            <span className="font-mono truncate text-sm sm:text-base text-[#e3e3e3] group-hover/file:text-[#ffffff] transition-colors duration-200">
+              {name}
+            </span>
+            <div className="flex flex-wrap gap-2 sm:gap-3 text-xs sm:text-sm text-[#858585]">
+              <div className="flex items-center gap-1 sm:gap-2">
+                <Clock className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+                <span>{time}</span>
+              </div>
+              <div className="flex items-center gap-1 sm:gap-2">
+                <MapPin className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+                <span className="truncate">{venue}</span>
               </div>
             </div>
-          ))}
+          </div>
+          <p className="text-sm sm:text-base text-[#858585] truncate mt-0.5 sm:mt-1 group-hover/file:text-[#e3e3e3] transition-colors duration-200">
+            {description}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+interface FolderProps {
+  name: string;
+  children: React.ReactNode;
+  defaultOpen?: boolean;
+}
+
+const Folder: React.FC<FolderProps> = ({ name, children, defaultOpen = false }) => {
+  const [isOpen, setIsOpen] = useState(defaultOpen);
+
+  return (
+    <div className="py-1 sm:py-2">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center gap-2 sm:gap-3 w-full hover:bg-[#37373d] p-1.5 sm:p-2.5 rounded-sm transition-all duration-200 ease-in-out group"
+      >
+        <div className="transition-transform duration-200 ease-in-out" style={{ transform: isOpen ? 'rotate(0deg)' : 'rotate(-90deg)' }}>
+          <ChevronDown className="h-4 w-4 sm:h-5 sm:w-5 text-[#858585]" />
+        </div>
+        <FolderIcon className="h-4 w-4 sm:h-5 sm:w-5 text-[#e3e3e3] group-hover:text-[#ffffff] transition-colors duration-200" />
+        <span className="text-base sm:text-lg text-[#e3e3e3] group-hover:text-[#ffffff] transition-colors duration-200">{name}</span>
+      </button>
+      <div 
+        className={`ml-4 sm:ml-6 border-l border-[#404040] pl-2 sm:pl-3 mt-0.5 sm:mt-1 overflow-hidden transition-all duration-200 ease-in-out ${
+          isOpen ? 'opacity-100 max-h-[1000px]' : 'opacity-0 max-h-0'
+        }`}
+      >
+        {children}
+      </div>
+    </div>
+  );
+};
+
+export function ScheduleSection() {
+  return (
+    <section id="schedule" className="py-8 sm:py-16 bg-background">
+      <div className="container mx-auto px-3 sm:px-6">
+        <h2 className="text-2xl sm:text-4xl font-bold mb-6 sm:mb-12 text-center">Event Schedule</h2>
+        
+        <div className="max-w-4xl mx-auto bg-card border rounded-lg p-3 sm:p-6 shadow-sm">
+          <div className="space-y-2 sm:space-y-4">
+            {schedule.map((day, i) => (
+              <Folder key={i} name={day.date} defaultOpen={i === 0}>
+                {day.events.map((event, j) => (
+                  <File
+                    key={j}
+                    name={event.name}
+                    time={event.time}
+                    description={event.description}
+                    type={event.type}
+                    venue={event.venue}
+                  />
+                ))}
+              </Folder>
+            ))}
+          </div>
         </div>
       </div>
     </section>
