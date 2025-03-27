@@ -20,6 +20,7 @@ interface RegistrationData {
   email: string;
   sim_id: string;
   course_and_university: string;
+  telegram_handle: string;
   has_team: boolean;
   is_team_lead: boolean | null;
   team_lead_email: string | null;
@@ -31,6 +32,7 @@ interface FormErrors {
   email?: string;
   sim_id?: string;
   course_and_university?: string;
+  telegram_handle?: string;
   team_name?: string;
   team_lead_email?: string;
   is_team_lead?: string;
@@ -44,6 +46,7 @@ export function RegisterForm() {
     email: '',
     sim_id: '',
     course_and_university: '',
+    telegram_handle: '',
     has_team: false,
     is_team_lead: null,
     team_lead_email: null,
@@ -103,6 +106,11 @@ export function RegisterForm() {
 
     if (!formData.course_and_university.trim()) {
       newErrors.course_and_university = "Please enter your course and university";
+      isValid = false;
+    }
+
+    if (!formData.telegram_handle.trim()) {
+      newErrors.telegram_handle = "Please enter your Telegram handle";
       isValid = false;
     }
 
@@ -206,6 +214,7 @@ export function RegisterForm() {
             email: formData.email,
             sim_id: formData.sim_id,
             course_and_university: formData.course_and_university,
+            telegram_handle: formData.telegram_handle,
             has_team: formData.has_team,
             is_team_lead: formData.is_team_lead,
             team_lead_email: formData.team_lead_email,
@@ -226,6 +235,7 @@ export function RegisterForm() {
         email: '',
         sim_id: '',
         course_and_university: '',
+        telegram_handle: '',
         has_team: false,
         is_team_lead: null,
         team_lead_email: null,
@@ -291,6 +301,13 @@ export function RegisterForm() {
           newErrors.course_and_university = "Please enter your course and university";
         } else {
           delete newErrors.course_and_university;
+        }
+        break;
+      case 'telegram_handle':
+        if (!value.trim()) {
+          newErrors.telegram_handle = "Please enter your Telegram handle";
+        } else {
+          delete newErrors.telegram_handle;
         }
         break;
       case 'team_name':
@@ -369,7 +386,7 @@ export function RegisterForm() {
           </div>
           
           <div className="flex flex-col space-y-1.5">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">School Email</Label>
             <Input
               id="email"
               type="email"
@@ -377,7 +394,7 @@ export function RegisterForm() {
               value={formData.email}
               onChange={(e) => handleFieldChange('email', e.target.value)}
               onBlur={(e) => handleFieldValidation('email', e.target.value)}
-              placeholder="you@example.com"
+              placeholder="you@mymail.sim.edu.sg"
               className={errors.email ? "border-red-500 focus-visible:ring-red-500" : ""}
             />
             {errors.email && (
@@ -430,6 +447,28 @@ export function RegisterForm() {
                   <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                 </svg>
                 {errors.course_and_university}
+              </p>
+            )}
+          </div>
+
+          <div className="flex flex-col space-y-1.5">
+            <Label htmlFor="telegram_handle">Telegram Handle</Label>
+            <Input
+              id="telegram_handle"
+              type="text"
+              required
+              value={formData.telegram_handle}
+              onChange={(e) => handleFieldChange('telegram_handle', e.target.value)}
+              onBlur={(e) => handleFieldValidation('telegram_handle', e.target.value)}
+              placeholder="@username"
+              className={errors.telegram_handle ? "border-red-500 focus-visible:ring-red-500" : ""}
+            />
+            {errors.telegram_handle && (
+              <p className="text-sm text-red-500 mt-1 flex items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
+                {errors.telegram_handle}
               </p>
             )}
           </div>

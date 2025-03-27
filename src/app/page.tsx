@@ -43,6 +43,11 @@ const PartnersSection = dynamic(() => import("@/components/partners-section").th
   ssr: false
 });
 
+const PrizesSection = dynamic(() => import("@/components/prizes-section").then(mod => mod.PrizesSection), {
+  loading: () => <LoadingSection />,
+  ssr: false
+});
+
 const ScheduleSection = dynamic(() => import("@/components/schedule-section").then(mod => mod.ScheduleSection), {
   loading: () => <LoadingSection />,
   ssr: false
@@ -75,6 +80,9 @@ export default function Home() {
         </Suspense>
         <Suspense fallback={<LoadingSection />}>
           <PartnersSection />
+        </Suspense>
+        <Suspense fallback={<LoadingSection />}>
+          <PrizesSection />
         </Suspense>
         <Suspense fallback={<LoadingSection />}>
           <ScheduleSection />

@@ -167,6 +167,9 @@ export function HeroSection() {
                 />
                 Your browser does not support the video tag.
               </video>
+              <div className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 px-2 py-1 rounded bg-black/50 text-white text-sm">
+                Highlights from 2024 Hackathon
+              </div>
               <button
                 onClick={toggleMute}
                 className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 p-1.5 sm:p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors z-10"
