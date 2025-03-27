@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, memo, useMemo } from 'react';
 import { ChevronDown, Clock, Folder as FolderIcon, FileCode, FileCog, FileText, Terminal, MapPin, FileJson, FileType, Presentation } from 'lucide-react';
 
 // Convert events to file-like structure
@@ -163,16 +163,18 @@ const getFileIcon = (type: string, name: string) => {
   }
 };
 
-const File: React.FC<FileProps> = ({ name, time, description, type, venue }) => {
+const FileComponent = ({ name, time, description, type, venue }: FileProps) => {
+  const icon = useMemo(() => getFileIcon(type, name), [type, name]);
+
   return (
-    <div className="group/file py-1 sm:py-1.5">
-      <div className="flex items-start gap-2 sm:gap-3 p-1.5 sm:p-2.5 hover:bg-[#37373d] rounded-sm transition-all duration-200 ease-in-out cursor-pointer">
+    <div className="py-1 sm:py-1.5">
+      <div className="flex items-start gap-2 sm:gap-3 p-1.5 sm:p-2.5 hover:bg-[#37373d] rounded-sm cursor-pointer">
         <div className="flex-shrink-0 mt-1">
-          {getFileIcon(type, name)}
+          {icon}
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
-            <span className="font-mono truncate text-sm sm:text-base text-[#e3e3e3] group-hover/file:text-[#ffffff] transition-colors duration-200">
+            <span className="font-mono truncate text-sm sm:text-base text-[#e3e3e3]">
               {name}
             </span>
             <div className="flex flex-wrap gap-2 sm:gap-3 text-xs sm:text-sm text-[#858585]">
@@ -186,7 +188,7 @@ const File: React.FC<FileProps> = ({ name, time, description, type, venue }) => 
               </div>
             </div>
           </div>
-          <p className="text-sm sm:text-base text-[#858585] truncate mt-0.5 sm:mt-1 group-hover/file:text-[#e3e3e3] transition-colors duration-200">
+          <p className="text-sm sm:text-base text-[#858585] truncate mt-0.5 sm:mt-1">
             {description}
           </p>
         </div>
@@ -201,25 +203,25 @@ interface FolderProps {
   defaultOpen?: boolean;
 }
 
-const Folder: React.FC<FolderProps> = ({ name, children, defaultOpen = false }) => {
+const FolderComponent = ({ name, children, defaultOpen = false }: FolderProps) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
   return (
     <div className="py-1 sm:py-2">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 sm:gap-3 w-full hover:bg-[#37373d] p-1.5 sm:p-2.5 rounded-sm transition-all duration-200 ease-in-out group"
+        className="flex items-center gap-2 sm:gap-3 w-full hover:bg-[#37373d] p-1.5 sm:p-2.5 rounded-sm cursor-pointer group"
       >
-        <div className="transition-transform duration-200 ease-in-out" style={{ transform: isOpen ? 'rotate(0deg)' : 'rotate(-90deg)' }}>
-          <ChevronDown className="h-4 w-4 sm:h-5 sm:w-5 text-[#858585]" />
-        </div>
-        <FolderIcon className="h-4 w-4 sm:h-5 sm:w-5 text-[#e3e3e3] group-hover:text-[#ffffff] transition-colors duration-200" />
-        <span className="text-base sm:text-lg text-[#e3e3e3] group-hover:text-[#ffffff] transition-colors duration-200">{name}</span>
+        <ChevronDown 
+          className="h-4 w-4 sm:h-5 sm:w-5 text-[#858585]" 
+          style={{ transform: isOpen ? 'rotate(0deg)' : 'rotate(-90deg)' }}
+        />
+        <FolderIcon className="h-4 w-4 sm:h-5 sm:w-5 text-[#e3e3e3]" />
+        <span className="text-base sm:text-lg text-[#e3e3e3]">{name}</span>
       </button>
       <div 
-        className={`ml-4 sm:ml-6 border-l border-[#404040] pl-2 sm:pl-3 mt-0.5 sm:mt-1 overflow-hidden transition-all duration-200 ease-in-out ${
-          isOpen ? 'opacity-100 max-h-[1000px]' : 'opacity-0 max-h-0'
-        }`}
+        className="ml-4 sm:ml-6 border-l border-[#404040] pl-2 sm:pl-3"
+        style={{ display: isOpen ? 'block' : 'none' }}
       >
         {children}
       </div>
@@ -227,7 +229,13 @@ const Folder: React.FC<FolderProps> = ({ name, children, defaultOpen = false }) 
   );
 };
 
-export function ScheduleSection() {
+const File = memo(FileComponent);
+const Folder = memo(FolderComponent);
+
+File.displayName = 'File';
+Folder.displayName = 'Folder';
+
+const ScheduleSectionComponent = () => {
   return (
     <section id="schedule" className="py-8 sm:py-16 bg-background">
       <div className="container mx-auto px-3 sm:px-6">
@@ -254,4 +262,7 @@ export function ScheduleSection() {
       </div>
     </section>
   );
-} 
+};
+
+export const ScheduleSection = memo(ScheduleSectionComponent);
+ScheduleSection.displayName = 'ScheduleSection'; 
