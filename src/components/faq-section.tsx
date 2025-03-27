@@ -3,27 +3,38 @@ import React from 'react';
 const faqs = [
   {
     question: "Who can participate in HackXperience?",
-    answer: "All SIM students are welcome to participate, regardless of their educational background or programming experience."
+    answer: "We welcome all tech enthusiasts students to participate, regardless of their educational background or programming experience."
   },
+
   {
-    question: "Do I need to have a team before registering?",
-    answer: "Yes,"
+    question: "Do I need to be good at coding to participate?",
+    answer: "Hackathons are an opportunity to demonstrate creativity, problem-solving and critical thinking. We welcome to participate!"
+  },
+
+  {
+    question: "Can I register as an Individual?",
+    answer: "Yes, we will be help you find a team during d-day"
   },
   {
     question: "Is there a registration fee?",
-    answer: "We want to make this event open for hackathon-enthusiasts like you! Participation is completely FREE for all SIM students, thanks to our generous sponsors."
+    answer: "We want to make this event open for hackathon-enthusiasts like you! Participation is completely FREE for all, thanks to our generous sponsors."
   },
   {
     question: "What should I bring to the hackathon?",
-    answer: "Bring your laptop, charger, any hardware you want to work with, and your enthusiasm! We'll provide the rest."
+    answer: "Bring your laptop, charger, anything you want to work with, and your enthusiasm!"
   },
   {
-    question: "Will there be prizes?",
-    answer: "Yes! We have over $50,000 in prizes across various categories, including Best Overall, Best UI/UX, Most Innovative, and more."
+    question: "Can I work on a pre-existing project before the hackathon?",
+    answer: "Coding should start during the hackathon. You are required to setup a Github repository and share your Github collab to your facilitators for auditing purposes"
   },
   {
-    question: "Can I work on a pre-existing project?",
-    answer: "All projects must be started from scratch at the event. You can come with ideas, but the coding should begin at the hackathon."
+    question: "Is this a 24 hour hackathon? Do I need to stay overnight? ",
+    answer: "The venue will be open on Day 1 from 3PM -  9PM, and are allowed to continue working on their project overnight at home. Teams must stop working on Day 2 by 3PM"
+  },
+
+  {
+    question: "What must I make? What is the problem statement and theme",
+    answer: "Problem Statement will be revealed during the D-day! Stay tuned :) "
   }
 ];
 

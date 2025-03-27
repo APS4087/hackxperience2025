@@ -32,7 +32,7 @@ export function AboutSection() {
             </CardHeader>
             <CardContent>
               <CardDescription className="text-gray-600 mt-2 text-white">
-                Develop innovative solutions and showcase your skills.
+                Develop innovative solutions and showcase your skills!
               </CardDescription>
             </CardContent>
           </Card>
