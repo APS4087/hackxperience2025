@@ -1,170 +1,27 @@
-import React, { useState, memo, useMemo } from 'react';
-import { ChevronDown, Clock, Folder as FolderIcon, FileCode, FileCog, FileText, Terminal, MapPin, FileJson, FileType, Presentation } from 'lucide-react';
+import { schedule, Event, DaySchedule } from './schedule-data';
+import React, { useState, memo } from 'react';
+import { ChevronDown, Clock, Folder as FolderIcon, FileCode, FileCog, FileText, Terminal, MapPin, FileJson, Presentation } from 'lucide-react';
 
-// Convert events to file-like structure
-const schedule = [
-  {
-    date: "Day 1",
-    events: [
-      {
-        time: "11:30",
-        name: "venue-open.sh",
-        type: "script",
-        description: "Venue Open",
-        venue: "LT B.2.17"
-      },
-      {
-        time: "12:30",
-        name: "introduction.md",
-        type: "doc",
-        description: "Introduction",
-        venue: "LT B.2.17"
-      },
-      {
-        time: "13:00",
-        name: "hackathon-briefing.jsx",
-        type: "component",
-        description: "Hackathon Briefing & Workshop",
-        venue: "LT B.2.17"
-      },
-      {
-        time: "14:30",
-        name: "team-formation.js",
-        type: "script",
-        description: "Team Formation",
-        venue: "LT B.2.17"
-      },
-      {
-        time: "15:00",
-        name: "team-registration.sh",
-        type: "script",
-        description: "Team Registration",
-        venue: "PAT Foyer"
-      },
-      {
-        time: "15:30",
-        name: "hacking-session-1.py",
-        type: "script",
-        description: "Hacking Time",
-        venue: "PAT Foyer"
-      },
-      {
-        time: "18:00",
-        name: "dinner.yaml",
-        type: "config",
-        description: "Dinner Collection",
-        venue: "PAT Foyer"
-      },
-      {
-        time: "18:00",
-        name: "hacking-session-2.py",
-        type: "script",
-        description: "Hacking Time",
-        venue: "PAT Foyer"
-      }
-    ]
-  },
-  {
-    date: "Day 2",
-    events: [
-      {
-        time: "08:30",
-        name: "venue-open-day2.sh",
-        type: "script",
-        description: "Venue Open",
-        venue: "PAT Foyer"
-      },
-      {
-        time: "08:30",
-        name: "hacking-session-3.py",
-        type: "script",
-        description: "Hacking Time",
-        venue: "PAT Foyer"
-      },
-      {
-        time: "11:30",
-        name: "lunch.yaml",
-        type: "config",
-        description: "Lunch Collection",
-        venue: "PAT Foyer"
-      },
-      {
-        time: "11:30",
-        name: "hacking-session-4.py",
-        type: "script",
-        description: "Hacking Time",
-        venue: "PAT Foyer"
-      },
-      {
-        time: "15:00",
-        name: "submission.md",
-        type: "doc",
-        description: "Submission",
-        venue: "PAT Foyer"
-      },
-      {
-        time: "15:10",
-        name: "presentation.pptx",
-        type: "doc",
-        description: "Presentation + Judging",
-        venue: "PAT Foyer"
-      },
-      {
-        time: "17:00",
-        name: "panel-talk.md",
-        type: "doc",
-        description: "Panel Talk",
-        venue: "PAT Foyer"
-      },
-      {
-        time: "17:30",
-        name: "closing.ceremony",
-        type: "component",
-        description: "Awarding, Closing, Networking",
-        venue: "PAT Foyer"
-      },
-    ]
-  }
-];
-
-interface FileProps {
-  name: string;
-  time: string;
-  description: string;
-  type: string;
-  venue: string;
-}
-
-const getFileIcon = (type: string, name: string) => {
-  const fileExtension = type.toLowerCase();
-  switch (fileExtension) {
-    case 'script':
-      if (name.endsWith('.sh')) {
-        return <Terminal className="h-4 w-4 sm:h-5 sm:w-5 text-green-500/70" />;
-      } else if (name.endsWith('.py')) {
-        return <FileCode className="h-4 w-4 sm:h-5 sm:w-5 text-blue-500/70" />;
-      } else if (name.endsWith('.js')) {
-        return <FileJson className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-500/70" />;
-      }
-      return <Terminal className="h-4 w-4 sm:h-5 sm:w-5 text-green-500/70" />;
-    case 'config':
-      return <FileCog className="h-4 w-4 sm:h-5 sm:w-5 text-blue-500/70" />;
-    case 'component':
-      return <FileCode className="h-4 w-4 sm:h-5 sm:w-5 text-purple-500/70" />;
-    case 'doc':
-      if (name.endsWith('.pptx')) {
-        return <Presentation className="h-4 w-4 sm:h-5 sm:w-5 text-red-500/70" />;
-      } else if (name.endsWith('.md')) {
-        return <FileText className="h-4 w-4 sm:h-5 sm:w-5 text-blue-500/70" />;
-      }
-      return <FileType className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500/70" />;
-    default:
-      return <FileText className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500/70" />;
-  }
+// Pre-compute file icons mapping outside component
+const FILE_ICONS: Record<string, React.ReactElement> = {
+  'sh': <Terminal className="h-4 w-4 sm:h-5 sm:w-5 text-green-500/70" />,
+  'py': <FileCode className="h-4 w-4 sm:h-5 sm:w-5 text-blue-500/70" />,
+  'js': <FileJson className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-500/70" />,
+  'yaml': <FileCog className="h-4 w-4 sm:h-5 sm:w-5 text-blue-500/70" />,
+  'jsx': <FileCode className="h-4 w-4 sm:h-5 sm:w-5 text-purple-500/70" />,
+  'pptx': <Presentation className="h-4 w-4 sm:h-5 sm:w-5 text-red-500/70" />,
+  'md': <FileText className="h-4 w-4 sm:h-5 sm:w-5 text-blue-500/70" />,
+  'default': <FileText className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500/70" />
 };
 
-const FileComponent = ({ name, time, description, type, venue }: FileProps) => {
-  const icon = useMemo(() => getFileIcon(type, name), [type, name]);
+const getFileIcon = (type: string, name: string): React.ReactElement => {
+  const extension = name.split('.').pop() || '';
+  return FILE_ICONS[extension] || FILE_ICONS.default;
+};
+
+const FileComponent = memo<Event>(({ name, time, description, type, venue }) => {
+  // Move icon computation outside render
+  const icon = getFileIcon(type, name);
 
   return (
     <div className="py-1 sm:py-1.5">
@@ -195,7 +52,9 @@ const FileComponent = ({ name, time, description, type, venue }: FileProps) => {
       </div>
     </div>
   );
-};
+});
+
+FileComponent.displayName = 'FileComponent';
 
 interface FolderProps {
   name: string;
@@ -203,7 +62,7 @@ interface FolderProps {
   defaultOpen?: boolean;
 }
 
-const FolderComponent = ({ name, children, defaultOpen = false }: FolderProps) => {
+const FolderComponent = memo<FolderProps>(({ name, children, defaultOpen = false }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
   return (
@@ -227,13 +86,9 @@ const FolderComponent = ({ name, children, defaultOpen = false }: FolderProps) =
       </div>
     </div>
   );
-};
+});
 
-const File = memo(FileComponent);
-const Folder = memo(FolderComponent);
-
-File.displayName = 'File';
-Folder.displayName = 'Folder';
+FolderComponent.displayName = 'FolderComponent';
 
 const ScheduleSectionComponent = () => {
   return (
@@ -243,19 +98,15 @@ const ScheduleSectionComponent = () => {
         
         <div className="max-w-4xl mx-auto bg-card border rounded-lg p-3 sm:p-6 shadow-sm">
           <div className="space-y-2 sm:space-y-4">
-            {schedule.map((day, i) => (
-              <Folder key={i} name={day.date} defaultOpen={i === 0}>
-                {day.events.map((event, j) => (
-                  <File
+            {schedule.map((day: DaySchedule, i: number) => (
+              <FolderComponent key={i} name={day.date} defaultOpen={i === 0}>
+                {day.events.map((event: Event, j: number) => (
+                  <FileComponent
                     key={j}
-                    name={event.name}
-                    time={event.time}
-                    description={event.description}
-                    type={event.type}
-                    venue={event.venue}
+                    {...event}
                   />
                 ))}
-              </Folder>
+              </FolderComponent>
             ))}
           </div>
         </div>

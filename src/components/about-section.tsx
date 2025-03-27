@@ -9,15 +9,6 @@ import {
   CardDescription,
 } from "@/components/ui/card"; // Assuming Card is from the UI library
 
-const highlights = [
-  "$50,000 in prizes and scholarships",
-  "Mentorship from industry experts",
-  "Workshops and technical sessions",
-  "Networking opportunities with top companies",
-  "Free food and swag for all participants",
-  "Post-event job and internship opportunities"
-];
-
 export function AboutSection() {
   return (
     <section id="about" className="py-20 bg-background">
