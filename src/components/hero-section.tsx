@@ -3,6 +3,37 @@ import React, { useRef, useState, useEffect } from "react";
 import { ContainerScroll } from "@/components/ui/container-scroll-animation";
 import { Volume2, VolumeX } from "lucide-react";
 import Image from "next/image";
+import { AvatarCircles } from "@/registry/magicui/avatar-circles";
+
+const avatars = [
+  {
+    imageUrl: "/img/7.jpg",
+  },
+  {
+    imageUrl: "/img/3.jpeg",
+  },
+  {
+    imageUrl: "/img/9.jpg",
+  },
+  {
+    imageUrl: "/img/1.jpeg",
+  },
+  {
+    imageUrl: "/img/6.jpg",
+  },
+  {
+    imageUrl: "/img/4.jpeg",
+  },
+  {
+    imageUrl: "/img/8.jpg",
+  },
+  {
+    imageUrl: "/img/2.jpeg",
+  },
+  {
+    imageUrl: "/img/5.jpeg",
+  },
+];
 
 // Custom hook for media query
 function useMediaQuery(query: string) {
@@ -115,6 +146,12 @@ export function HeroSection() {
 
   return (
     <div className="flex flex-col overflow-hidden -mx-4 sm:mx-0">
+      <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-10 flex flex-col items-end gap-2">
+        <span className="text-sm sm:text-base font-medium text-white">
+          By SIM IT Club
+        </span>
+        <AvatarCircles avatarUrls={avatars} numPeople={20} />
+      </div>
       <ContainerScroll
         titleComponent={
           <>

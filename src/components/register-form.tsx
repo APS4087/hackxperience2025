@@ -25,6 +25,7 @@ interface RegistrationData {
   is_team_lead: boolean | null;
   team_lead_email: string | null;
   team_name: string | null;
+  is_vegetarian: boolean;
 }
 
 interface FormErrors {
@@ -50,7 +51,8 @@ export function RegisterForm() {
     has_team: false,
     is_team_lead: null,
     team_lead_email: null,
-    team_name: null
+    team_name: null,
+    is_vegetarian: false
   });
 
   const validateEmail = useCallback((email: string) => {
@@ -219,6 +221,7 @@ export function RegisterForm() {
             is_team_lead: formData.is_team_lead,
             team_lead_email: formData.team_lead_email,
             team_name: formData.team_name,
+            is_vegetarian: formData.is_vegetarian,
             registered_at: new Date().toISOString()
           }
         ]);
@@ -239,7 +242,8 @@ export function RegisterForm() {
         has_team: false,
         is_team_lead: null,
         team_lead_email: null,
-        team_name: null
+        team_name: null,
+        is_vegetarian: false
       });
     } catch (error) {
       console.error("Registration error:", error);
@@ -574,6 +578,32 @@ export function RegisterForm() {
               )}
             </>
           )}
+
+          <div className="flex flex-col space-y-1.5">
+            <Label>Dietary Preference</Label>
+            <div className="flex items-center gap-4">
+              <label className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="is_vegetarian"
+                  checked={formData.is_vegetarian === true}
+                  onChange={() => setFormData(prev => ({ ...prev, is_vegetarian: true }))}
+                  className="h-4 w-4"
+                />
+                <span className="text-sm">Vegetarian</span>
+              </label>
+              <label className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  name="is_vegetarian"
+                  checked={formData.is_vegetarian === false}
+                  onChange={() => setFormData(prev => ({ ...prev, is_vegetarian: false }))}
+                  className="h-4 w-4"
+                />
+                <span className="text-sm">Non-Vegetarian</span>
+              </label>
+            </div>
+          </div>
 
           <InteractiveHoverButton
             type="submit"

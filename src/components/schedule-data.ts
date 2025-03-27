@@ -70,6 +70,13 @@ export const schedule: DaySchedule[] = [
         type: "script",
         description: "Hacking Time",
         venue: "PAT Foyer"
+      },
+      {
+        time: "21:30",
+        name: "day1-wrap.sh",
+        type: "script",
+        description: "End of Day 1 - Hacking Wrap Up",
+        venue: "PAT Foyer"
       }
     ]
   },
