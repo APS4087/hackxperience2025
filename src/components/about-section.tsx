@@ -26,12 +26,12 @@ export function AboutSection() {
               <div className="flex items-center justify-center w-16 h-16 rounded-full bg-red-100 mx-auto">
                 <FaCode className="text-red-500 text-3xl" />
               </div>
-              <CardTitle className="font-bold text-lg mt-4 text-white">
+              <CardTitle className="font-bold text-4xl mt-4 text-white">
                 Build & Innovate
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <CardDescription className="text-gray-600 mt-2 text-white">
+              <CardDescription className="text-gray-600 text-lg mt-1 text-white">
                 Develop innovative solutions and showcase your skills!
               </CardDescription>
             </CardContent>
@@ -47,13 +47,13 @@ export function AboutSection() {
               <div className="flex items-center justify-center w-16 h-16 rounded-full bg-red-100 mx-auto">
                 <FaUsers className="text-red-500 text-3xl" />
               </div>
-              <CardTitle className="font-bold text-lg mt-4 text-white">
-                Connect & Collaborate
+              <CardTitle className="font-bold text-4xl mt-4 text-white">
+                Connect & Collab
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <CardDescription className="text-gray-600 mt-2 text-white">
-                Work in teams of 3 - 5 people.
+              <CardDescription className="text-gray-600 text-lg mt-1 text-white">
+                  Foster collaboration by teamwork, in groups of 3 - 5 people.
               </CardDescription>
             </CardContent>
           </Card>
@@ -68,12 +68,12 @@ export function AboutSection() {
               <div className="flex items-center justify-center w-16 h-16 rounded-full bg-red-100 mx-auto">
                 <FaBolt className="text-red-500 text-3xl" />
               </div>
-              <CardTitle className="font-bold text-lg mt-4 text-white">
+              <CardTitle className="font-bold text-4xl mt-4 text-white">
                 Learn & Grow
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <CardDescription className="text-gray-600 mt-2 text-white">
+              <CardDescription className="text-gray-600 text-lg mt-1 text-white">
                 Gain exclusive mentorship, workshops, and networking sessions.
               </CardDescription>
             </CardContent>

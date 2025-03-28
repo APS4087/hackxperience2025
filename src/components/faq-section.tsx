@@ -29,7 +29,7 @@ const faqs = [
   },
   {
     question: "Is this a 24 hour hackathon? Do I need to stay overnight? ",
-    answer: "The venue will be open on Day 1 until 9PM, and are allowed to continue working on their project overnight at home. Teams must stop working on Day 2 by 3PM. At least one team would be present instead"
+    answer: "The venue will be open on Day 1 until 9PM, and are allowed to continue working on their project overnight at home. Teams must stop working on Day 2 by 3PM. At least one of your team member should be present throughout the hackathon"
   },
   
   {
