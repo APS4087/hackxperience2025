@@ -4,6 +4,8 @@ import { HeroSection } from "@/components/hero-section";
 import { Footer } from "@/components/footer";
 import dynamic from 'next/dynamic';
 import { Suspense, useEffect, useState } from 'react';
+import { useSmoothScroll } from "@/hooks/use-smooth-scroll";
+import { Preloader } from "@/components/preloader";
 
 // Custom loading components with reduced animation when reduced motion is preferred
 function LoadingSection({ className = "" }: { className?: string }) {
@@ -15,6 +17,7 @@ function LoadingSection({ className = "" }: { className?: string }) {
 
     const handleChange = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
     mediaQuery.addEventListener('change', handleChange);
+    
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);
 
@@ -32,7 +35,7 @@ function LoadingSection({ className = "" }: { className?: string }) {
   );
 }
 
-// Lazy load sections with custom loading states
+// Lazy load sections with custom loading states and smaller chunks
 const AboutSection = dynamic(() => import("@/components/about-section").then(mod => mod.AboutSection), {
   loading: () => <LoadingSection />,
   ssr: false
@@ -43,6 +46,7 @@ const PartnersSection = dynamic(() => import("@/components/partners-section").th
   ssr: false
 });
 
+// Group similar sections together for better code splitting
 const PrizesSection = dynamic(() => import("@/components/prizes-section").then(mod => mod.PrizesSection), {
   loading: () => <LoadingSection />,
   ssr: false
@@ -53,6 +57,7 @@ const ScheduleSection = dynamic(() => import("@/components/schedule-section").th
   ssr: false
 });
 
+// Keep FAQ and Register as separate bundles to be loaded on-demand
 const FAQSection = dynamic(() => import("@/components/faq-section").then(mod => mod.FAQSection), {
   loading: () => <LoadingSection />,
   ssr: false
@@ -69,36 +74,47 @@ const ReadySection = dynamic(() => import("@/components/ready-section").then(mod
 });
 
 export default function Home() {
+  // Initialize smooth scrolling
+  useSmoothScroll();
+  
   return (
-    <div className="min-h-screen flex flex-col overflow-x-hidden">
-      <main className="flex-1 relative">
-        <Suspense fallback={<LoadingSection className="mt-4" />}>
-          <HeroSection />
-        </Suspense>  
-        <Suspense fallback={<LoadingSection />}>
-          <AboutSection />
-        </Suspense>
-        <Suspense fallback={<LoadingSection />}>
-          <PartnersSection />
-        </Suspense>
-        <Suspense fallback={<LoadingSection />}>
-          <PrizesSection />
-        </Suspense>
-        <Suspense fallback={<LoadingSection />}>
-          <ScheduleSection />
-        </Suspense>
-        <Suspense fallback={<LoadingSection />}>
-          <ReadySection />
-        </Suspense>
-        <Suspense fallback={<LoadingSection />}>
-          <RegisterSection />
-        </Suspense>
-        <Suspense fallback={<LoadingSection />}>
-          <FAQSection />
-        </Suspense>
-      </main>
-      
-      <Footer />
-    </div>
+    <>
+      <Preloader />
+      <div className="min-h-screen flex flex-col overflow-x-hidden">
+        <main className="flex-1 relative">
+          <Suspense fallback={<LoadingSection className="mt-4" />}>
+            <HeroSection />
+          </Suspense>  
+          <Suspense fallback={<LoadingSection />}>
+            <AboutSection />
+          </Suspense>
+          <Suspense fallback={<LoadingSection />}>
+            <PartnersSection />
+          </Suspense>
+          
+          {/* Prizes and Schedule sections */}
+          <Suspense fallback={<LoadingSection />}>
+            <PrizesSection />
+          </Suspense>
+          <Suspense fallback={<LoadingSection />}>
+            <ScheduleSection />
+          </Suspense>
+          
+          <Suspense fallback={<LoadingSection />}>
+            <ReadySection />
+          </Suspense>
+          
+          {/* Lower-priority sections loaded later */}
+          <Suspense fallback={<LoadingSection />}>
+            <RegisterSection />
+          </Suspense>
+          <Suspense fallback={<LoadingSection />}>
+            <FAQSection />
+          </Suspense>
+        </main>
+        
+        <Footer />
+      </div>
+    </>
   );
 }
