@@ -1,7 +1,7 @@
 "use client";
 import React, { useRef, useState, useEffect } from "react";
 import { ContainerScroll } from "@/components/ui/container-scroll-animation";
-import { Volume2, VolumeX, Volume1 } from "lucide-react";
+import { Volume2, VolumeX } from "lucide-react";
 import Image from "next/image";
 import { AvatarCircles } from "@/registry/magicui/avatar-circles";
 import Head from "next/head";
@@ -62,7 +62,6 @@ export function HeroSection() {
   const isMobile = useMediaQuery('(max-width: 639px)');
   const [preloaderDismissed, setPreloaderDismissed] = useState(false);
   const [volume, setVolume] = useState(1);
-  const [showVolumeControl, setShowVolumeControl] = useState(false);
 
   // Preload the hero image with high priority
   useEffect(() => {
@@ -94,9 +93,6 @@ export function HeroSection() {
         // Apply volume setting from the event
         videoRef.current.volume = initialVolume;
         
-        // Show volume control when starting with audio
-        setShowVolumeControl(withAudio);
-        
         // Play the video
         videoRef.current.play().catch(error => {
           console.log("Video playback failed:", error);
@@ -104,7 +100,6 @@ export function HeroSection() {
           if (!videoRef.current!.muted) {
             videoRef.current!.muted = true;
             setIsMuted(true);
-            setShowVolumeControl(false);
             videoRef.current!.play().catch(err => 
               console.log("Muted playback also failed:", err)
             );
@@ -190,14 +185,9 @@ export function HeroSection() {
       videoRef.current.muted = newMutedState;
       setIsMuted(newMutedState);
       
-      // Show volume control when unmuting
+      // Apply current volume setting when unmuting
       if (!newMutedState) {
-        setShowVolumeControl(true);
-        // Apply current volume setting
         videoRef.current.volume = volume;
-      } else {
-        // Hide volume control when muting
-        setShowVolumeControl(false);
       }
       
       // If unmuting, ensure video is playing
@@ -207,28 +197,15 @@ export function HeroSection() {
           // Revert to muted state if unmuted playback fails
           videoRef.current!.muted = true;
           setIsMuted(true);
-          setShowVolumeControl(false);
         });
       }
     }
   };
 
-  // Handle volume change
-  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newVolume = parseFloat(e.target.value);
-    setVolume(newVolume);
-    
-    if (videoRef.current && !videoRef.current.muted) {
-      videoRef.current.volume = newVolume;
-    }
-  };
-
-  // Get volume icon based on level
+  // Get volume icon based on mute state
   const getVolumeIcon = () => {
     if (isMuted) {
       return <VolumeX className="w-5 h-5 sm:w-6 sm:h-6 text-white" />;
-    } else if (volume < 0.5) {
-      return <Volume1 className="w-5 h-5 sm:w-6 sm:h-6 text-white" />;
     } else {
       return <Volume2 className="w-5 h-5 sm:w-6 sm:h-6 text-white" />;
     }
@@ -326,22 +303,6 @@ export function HeroSection() {
                 >
                   {getVolumeIcon()}
                 </button>
-                
-                {/* Volume slider */}
-                {showVolumeControl && (
-                  <div className="absolute bottom-3 right-14 sm:bottom-4 sm:right-16 p-2 bg-black/50 rounded-lg z-10 flex items-center transition-opacity">
-                    <input
-                      type="range"
-                      min="0"
-                      max="1"
-                      step="0.01"
-                      value={volume}
-                      onChange={handleVolumeChange}
-                      className="w-20 sm:w-24 accent-primary"
-                      aria-label="Volume control"
-                    />
-                  </div>
-                )}
               </>
             )}
           </div>
