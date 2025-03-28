@@ -8,7 +8,7 @@ const faqs = [
 
   {
     question: "Do I need to be good at coding to participate?",
-    answer: "Hackathons are an opportunity to demonstrate creativity, problem-solving and critical thinking. We welcome to participate!"
+    answer: "Hackathons are an opportunity to demonstrate creativity, problem-solving and critical thinking. We welcome tech-enthusiasts like you to participate!"
   },
 
   {
@@ -29,9 +29,9 @@ const faqs = [
   },
   {
     question: "Is this a 24 hour hackathon? Do I need to stay overnight? ",
-    answer: "The venue will be open on Day 1 from 3PM -  9PM, and are allowed to continue working on their project overnight at home. Teams must stop working on Day 2 by 3PM"
+    answer: "The venue will be open on Day 1 until 9PM, and are allowed to continue working on their project overnight at home. Teams must stop working on Day 2 by 3PM. At least one team would be present instead"
   },
-
+  
   {
     question: "What must I make? What is the problem statement and theme",
     answer: "Problem Statement will be revealed during the D-day! Stay tuned :) "
