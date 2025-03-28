@@ -563,7 +563,7 @@ export function RegisterForm() {
                     value={formData.team_lead_email || ''}
                     onChange={(e) => handleFieldChange('team_lead_email', e.target.value)}
                     onBlur={(e) => handleFieldValidation('team_lead_email', e.target.value)}
-                    placeholder="team.lead@example.com"
+                    placeholder="team.lead@mymail.sim.edu.sg"
                     className={errors.team_lead_email ? "border-red-500 focus-visible:ring-red-500" : ""}
                   />
                   {errors.team_lead_email && (
