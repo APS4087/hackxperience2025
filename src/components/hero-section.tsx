@@ -113,7 +113,7 @@ export function HeroSection() {
     return () => {
       window.removeEventListener('startHeroVideo', startVideo);
     };
-  }, []);
+  }, [volume]);
 
   // Only play when the preloader has been dismissed, but don't stop when leaving viewport
   useEffect(() => {

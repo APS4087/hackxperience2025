@@ -4,6 +4,7 @@ import localFont from 'next/font/local';
 import "./globals.css";
 import { Providers } from "./providers";
 import { ToasterProvider } from "@/components/toaster-provider";
+import { GoogleAnalytics } from "@/components/google-analytics";
 
 // Configure fonts with display swap and preload for critical fonts
 const inter = Inter({
@@ -46,6 +47,7 @@ export default function RootLayout({
       <head>
         {/* Add high priority resource hints */}
         <link rel="preload" href="/img/hero.jpg" as="image" fetchPriority="high" />
+        <GoogleAnalytics />
       </head>
       <body
         className={`${inter.variable} ${geistMono.variable} ${eightBitDragon.variable} font-sans antialiased min-h-screen overflow-x-hidden`}
