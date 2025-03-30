@@ -193,21 +193,6 @@ export function RegisterForm() {
         }
       }
 
-      // Check if team name is already taken
-      if (formData.has_team && formData.team_name) {
-        const { data: existingTeam } = await supabase
-          .from('registrations')
-          .select('id')
-          .eq('team_name', formData.team_name)
-          .single();
-
-        if (existingTeam) {
-          setLoading(false);
-          showToast.error("This team name is already taken. Please choose a different team name.");
-          return;
-        }
-      }
-
       const { error: insertError } = await supabase
         .from('registrations')
         .insert([
