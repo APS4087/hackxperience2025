@@ -8,12 +8,12 @@ const faqs = [
 
   {
     question: "Do I need to be good at coding to participate?",
-    answer: "Hackathons are an opportunity to demonstrate creativity, problem-solving and critical thinking. We welcome tech-enthusiasts like you to participate!"
+    answer: "Hackathons are your opportunity to demonstrate creativity, problem-solving and critical thinking. We welcome tech-enthusiasts like you to participate!"
   },
 
   {
     question: "Can I register as an Individual?",
-    answer: "Yes, we will be help you find a team during d-day"
+    answer: "Yes, we will help you find a team during Team Formation session"
   },
   {
     question: "Is there a registration fee?",
@@ -25,15 +25,19 @@ const faqs = [
   },
   {
     question: "Can I work on a pre-existing project before the hackathon?",
-    answer: "Coding should start during the hackathon. You are required to setup a Github repository and share your Github collab to your facilitators for auditing purposes"
+    answer: "Coding should start during the hackathon. During the hacking session, you are required to setup a Github repository and share your Github collab to your facilitators for auditing purposes"
   },
   {
     question: "Is this a 24 hour hackathon? Do I need to stay overnight? ",
-    answer: "The venue will be open on Day 1 until 9PM, and are allowed to continue working on their project overnight at home. Teams must stop working on Day 2 by 3PM. At least one of your team member should be present throughout the hackathon"
+    answer: (
+      <>
+        The venue will be open on Day 1 until 9PM, and are allowed to continue working on their project overnight at home. Teams must stop working on Day 2 by 3PM. <strong> At least ONE member must be present throughout the hacking sessions.</strong>
+      </>
+    )
   },
   
   {
-    question: "What must I make? What is the problem statement and theme",
+    question: "What must I make? What is the problem statement and theme?",
     answer: "Problem Statement will be revealed during the D-day! Stay tuned :) "
   }
 ];

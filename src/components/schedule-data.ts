@@ -115,7 +115,7 @@ export const schedule: DaySchedule[] = [
         time: "15:00",
         name: "submission.md",
         type: "doc",
-        description: "Submission",
+        description: "Submission Deadline",
         venue: "PAT Foyer"
       },
       {
