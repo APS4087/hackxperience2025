@@ -5,6 +5,16 @@ import type { Application } from "@splinetool/runtime";
 import type { Object3D, PerspectiveCamera, WebGLRenderer, Scene } from "three";
 import Spline from '@splinetool/react-spline';
 
+// Add TypeScript declaration for splineConfig
+declare global {
+  interface Window {
+    splineConfig?: {
+      wasmFetchOptions?: RequestInit;
+      baseUrl?: string;
+    };
+  }
+}
+
 interface SplineApplication extends Application {
   renderer?: WebGLRenderer;
   scene?: Scene;
@@ -52,6 +62,18 @@ export function SplineScene() {
         clearTimeout(resizeTimeoutRef.current);
       }
     };
+  }, [isClient]);
+
+  // Fix CORS issues with Spline WASM files
+  useEffect(() => {
+    if (!isClient) return;
+    
+    // Configure Spline to use our API proxy for WASM files
+    if (window.splineConfig === undefined) {
+      window.splineConfig = {
+        baseUrl: '/api/spline-proxy'
+      };
+    }
   }, [isClient]);
 
   const onLoad = useCallback((splineApp: SplineApplication) => {
