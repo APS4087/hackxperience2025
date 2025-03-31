@@ -295,6 +295,8 @@ export function RegisterForm() {
       case 'telegram_handle':
         if (!value.trim()) {
           newErrors.telegram_handle = "Please enter your Telegram handle";
+        } else if (!value.startsWith('@')) {
+          newErrors.telegram_handle = "Telegram handle must start with @";
         } else {
           delete newErrors.telegram_handle;
         }
