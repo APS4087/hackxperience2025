@@ -13,7 +13,7 @@ export interface DaySchedule {
 
 export const schedule: DaySchedule[] = [
   {
-    date: "Day 1",
+    date: "Day 1 (April 11)",
     events: [
       {
         time: "11:30",
@@ -33,7 +33,7 @@ export const schedule: DaySchedule[] = [
         time: "13:00",
         name: "hackathon-briefing.jsx",
         type: "component",
-        description: "Hackathon Briefing & Workshop",
+        description: "Hackathon zBriefing & Workshop",
         venue: "LT B.2.17"
       },
       {
@@ -81,7 +81,7 @@ export const schedule: DaySchedule[] = [
     ]
   },
   {
-    date: "Day 2",
+    date: "Day 2 (April 12)",
     events: [
       {
         time: "08:30",
