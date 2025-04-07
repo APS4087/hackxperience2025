@@ -6,14 +6,12 @@ import Image from "next/image";
 const companies = [
   {
     name: "DynamicWeb",
-    difficulty: "Open to All",
     gradientFrom: "from-[#0071CE]",
     gradientTo: "to-[#00AEEF]",
     logo: "/images/dynamicweb-logo.svg"
   },
   {
     name: "Kitchen Copilot",
-    difficulty: "Open to All",
     gradientFrom: "from-[#F56565]",
     gradientTo: "to-[#ED8936]",
     logo: "/images/kitchen-copilot-logo.png"
@@ -155,28 +153,6 @@ export const ProblemStatementsSection = () => {
                   </div>
 
                   <div className="mt-6 sm:mt-8">
-                    <div className="flex items-center space-x-3 sm:space-x-4">
-                      <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-tr ${company.gradientFrom}/20 ${company.gradientTo}/20 flex items-center justify-center`}>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className={`h-5 w-5 sm:h-6 sm:w-6 ${company.gradientTo.replace('to-', 'text-')}`}
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={1.5}
-                            d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2z"
-                          />
-                        </svg>
-                      </div>
-                      <div>
-                        <div className="text-sm text-zinc-500 dark:text-zinc-400">Participation</div>
-                        <div className="text-zinc-900 dark:text-white font-medium">{company.difficulty}</div>
-                      </div>
-                    </div>
                   </div>
                 </div>
 
