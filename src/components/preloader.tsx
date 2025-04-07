@@ -20,20 +20,20 @@ export function Preloader() {
     // First phase (0-70%): Fast progress
     if (progress < 70) {
       interval = setInterval(() => {
-        setProgress(prev => Math.min(prev + Math.random() * 3, 70));
-      }, 100);
+        setProgress(prev => Math.min(prev + Math.random() * 5, 70));
+      }, 50);
     } 
-    // Second phase (70-95%): Slower progress
+    // Second phase (70-95%): Faster progress
     else if (progress < 95) {
       interval = setInterval(() => {
-        setProgress(prev => Math.min(prev + Math.random() * 0.8, 95));
-      }, 200);
+        setProgress(prev => Math.min(prev + Math.random() * 2, 95));
+      }, 100);
     } 
-    // Final phase (95-100%): Very slow, simulating finalization
+    // Final phase (95-100%): Quick finalization
     else if (progress < 100) {
       interval = setInterval(() => {
-        setProgress(prev => Math.min(prev + 0.2, 100));
-      }, 150);
+        setProgress(prev => Math.min(prev + 0.5, 100));
+      }, 50);
     } 
     // When we reach 100%, set ready for user
     else if (progress === 100 && !readyForUser) {
@@ -46,11 +46,11 @@ export function Preloader() {
     };
   }, [progress, readyForUser]);
 
-  // Force complete loading after 5 seconds
+  // Force complete loading after 2 seconds instead of 5
   useEffect(() => {
     const timer = setTimeout(() => {
       setProgress(100);
-    }, 5000);
+    }, 2000);
     
     return () => clearTimeout(timer);
   }, []);

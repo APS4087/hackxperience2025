@@ -2,6 +2,7 @@
 
 import { HeroSection } from "@/components/hero-section";
 import { Footer } from "@/components/footer";
+import { AboutSection } from "@/components/about-section";
 import dynamic from 'next/dynamic';
 import { Suspense, useEffect, useState } from 'react';
 import { useSmoothScroll } from "@/hooks/use-smooth-scroll";
@@ -12,6 +13,7 @@ function LoadingSection({ className = "" }: { className?: string }) {
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
   useEffect(() => {
+    // Check if user prefers reduced motion
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     setPrefersReducedMotion(mediaQuery.matches);
 
@@ -36,11 +38,6 @@ function LoadingSection({ className = "" }: { className?: string }) {
 }
 
 // Lazy load sections with custom loading states and smaller chunks
-const AboutSection = dynamic(() => import("@/components/about-section").then(mod => mod.AboutSection), {
-  loading: () => <LoadingSection />,
-  ssr: false
-});
-
 const PartnersSection = dynamic(() => import("@/components/partners-section").then(mod => mod.PartnersSection), {
   loading: () => <LoadingSection />,
   ssr: false
@@ -87,12 +84,11 @@ export default function Home() {
       <Preloader />
       <div className="min-h-screen flex flex-col overflow-x-hidden">
         <main className="flex-1 relative">
-          <Suspense fallback={<LoadingSection className="mt-4" />}>
-            <HeroSection />
-          </Suspense>  
-          <Suspense fallback={<LoadingSection />}>
-            <AboutSection />
-          </Suspense>
+          {/* Critical sections loaded immediately */}
+          <HeroSection />
+          <AboutSection />
+          
+          {/* Lazy loaded sections */}
           <Suspense fallback={<LoadingSection />}>
             <PartnersSection />
           </Suspense>
@@ -108,11 +104,10 @@ export default function Home() {
             <ScheduleSection />
           </Suspense>
           
+          {/* Lower-priority sections loaded later */}
           <Suspense fallback={<LoadingSection />}>
             <ReadySection />
           </Suspense>
-          
-          {/* Lower-priority sections loaded later */}
           <Suspense fallback={<LoadingSection />}>
             <RegisterSection />
           </Suspense>

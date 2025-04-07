@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { RegisterForm } from './register-form';
 import dynamic from 'next/dynamic';
 
@@ -15,6 +15,8 @@ const SplineScene = dynamic(() => import('./spline-scene').then(mod => mod.Splin
 export function RegisterSection() {
   const [isMobile, setIsMobile] = useState(false);
   const [isClient, setIsClient] = useState(false);
+  const [isInView, setIsInView] = useState(false);
+  const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setIsClient(true);
@@ -26,8 +28,25 @@ export function RegisterSection() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  useEffect(() => {
+    if (!sectionRef.current) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section id="register" className="py-12 sm:py-16 md:py-20 bg-background/5">
+    <section ref={sectionRef} id="register" className="py-12 sm:py-16 md:py-20 bg-background/5">
       <div className="container mx-auto px-4 sm:px-6 md:px-8">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6 md:gap-8 items-center">
           {/* 3D Element Container Side - Hidden on Mobile */}
@@ -35,7 +54,7 @@ export function RegisterSection() {
             <div className="md:col-span-7">
               <div className="w-full h-[600px] md:h-[800px] rounded-lg shadow-lg bg-background/5 relative overflow-hidden">
                 <div className="absolute inset-0 w-full h-full">
-                  <SplineScene />
+                  {isInView && <SplineScene />}
                 </div>
               </div>
             </div>
