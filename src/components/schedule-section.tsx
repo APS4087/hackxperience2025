@@ -94,7 +94,17 @@ const ScheduleSectionComponent = () => {
   return (
     <section id="schedule" className="py-8 sm:py-16 bg-background">
       <div className="container mx-auto px-3 sm:px-6">
-        <h2 className="text-2xl sm:text-4xl font-bold mb-6 sm:mb-12 text-center">Event Schedule</h2>
+        <h2 
+          className="text-2xl sm:text-4xl font-bold mb-6 sm:mb-12 text-center"
+          style={{ 
+            WebkitBackgroundClip: "text",
+            backgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundImage: "linear-gradient(90deg, #f1f5f9 0%, #e2e8f0 25%, #ef4444 50%, #e2e8f0 75%, #f1f5f9 100%)"
+          }}
+        >
+          Event Schedule
+        </h2>
         
         <div className="max-w-4xl mx-auto bg-card border rounded-lg p-3 sm:p-6 shadow-sm">
           <div className="space-y-2 sm:space-y-4">

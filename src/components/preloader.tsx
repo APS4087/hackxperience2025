@@ -35,8 +35,8 @@ export function Preloader() {
         setProgress(prev => Math.min(prev + 0.2, 100));
       }, 150);
     } 
-    // When we reach 100%, set ready for user instead of hiding preloader
-    else if (!readyForUser) {
+    // When we reach 100%, set ready for user
+    else if (progress === 100 && !readyForUser) {
       setReadyForUser(true);
       if (interval) clearInterval(interval);
     }
@@ -57,16 +57,16 @@ export function Preloader() {
 
   // Handle user click to continue
   useEffect(() => {
-    if (readyForUser && clickEvent) {
+    if (progress === 100 && clickEvent) {
       // Delay to allow click animation to complete
       const timer = setTimeout(() => {
         setIsLoading(false);
         
-        // Trigger video play with audio and the default volume
+        // Trigger video play with audio muted
         const event = new CustomEvent('startHeroVideo', { 
           detail: { 
-            withAudio: true,
-            volume: DEFAULT_VOLUME  // Set default volume level
+            withAudio: false,
+            volume: DEFAULT_VOLUME
           } 
         });
         window.dispatchEvent(event);
@@ -74,7 +74,7 @@ export function Preloader() {
       
       return () => clearTimeout(timer);
     }
-  }, [readyForUser, clickEvent]);
+  }, [progress, clickEvent]);
 
   // Smooth progress text animation
   useEffect(() => {
@@ -102,8 +102,12 @@ export function Preloader() {
               delay: 0.3
             } 
           }}
-          className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black cursor-pointer"
-          onClick={() => readyForUser && setClickEvent(true)}
+          className={`fixed inset-0 z-50 flex flex-col items-center justify-center bg-black ${progress === 100 ? 'cursor-pointer' : 'cursor-not-allowed'}`}
+          onClick={() => {
+            if (progress === 100) {
+              setClickEvent(true);
+            }
+          }}
         >
           {/* Animated Background Elements */}
           <div className="absolute inset-0 overflow-hidden">
@@ -217,7 +221,7 @@ export function Preloader() {
               transition={{ duration: 0.4 }}
               className="mt-16 text-white/70 text-sm tracking-[0.15em] uppercase"
             >
-              {readyForUser ? (
+              {progress === 100 ? (
                 <motion.div 
                   className="flex flex-col items-center"
                   animate={{ 

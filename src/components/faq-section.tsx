@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from "framer-motion";
 
 const faqs = [
   {
@@ -44,15 +45,35 @@ const faqs = [
 
 export function FAQSection() {
   return (
-    <section id="faq" className="py-20 bg-background">
-      <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold mb-12 text-center">Frequently Asked Questions</h2>
+    <section id="faq" className="py-12 sm:py-20 bg-background">
+      <div className="container mx-auto px-4 sm:px-6">
+        <motion.h2 
+          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-center mb-8 sm:mb-12 px-4"
+          style={{ 
+            WebkitBackgroundClip: "text",
+            backgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundSize: "300% 100%",
+            backgroundImage: "linear-gradient(90deg, #f1f5f9 0%, #e2e8f0 25%, #ef4444 50%, #e2e8f0 75%, #f1f5f9 100%)",
+            filter: "drop-shadow(0 0 20px rgba(226,232,240,0.2))"
+          }}
+          animate={{
+            backgroundPosition: ["0% 0%", "100% 0%", "0% 0%"],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+        >
+          Frequently Asked Questions
+        </motion.h2>
         
-        <div className="max-w-3xl mx-auto grid gap-6">
+        <div className="max-w-3xl mx-auto grid gap-4 sm:gap-6">
           {faqs.map((faq, i) => (
-            <div key={i} className="bg-card rounded-lg p-6 shadow-sm border border-border/40">
-              <h3 className="text-lg font-medium mb-2">{faq.question}</h3>
-              <p className="text-muted-foreground">{faq.answer}</p>
+            <div key={i} className="bg-card rounded-lg p-4 sm:p-6 shadow-sm border border-border/40">
+              <h3 className="text-base sm:text-lg font-medium mb-2">{faq.question}</h3>
+              <p className="text-sm sm:text-base text-muted-foreground">{faq.answer}</p>
             </div>
           ))}
         </div>

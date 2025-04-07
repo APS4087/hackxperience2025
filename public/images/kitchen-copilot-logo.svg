@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="90" fill="#ffffff" />
+  
+  <!-- Chef's hat -->
+  <path d="M70,85 C70,70 80,60 100,60 C120,60 130,70 130,85 L130,110 L70,110 Z" fill="#f56565" />
+  <rect x="70" y="105" width="60" height="10" fill="#f56565" />
+  
+  <!-- Knife -->
+  <path d="M130,120 L160,80 L165,85 L135,125 Z" fill="#4a5568" />
+  <rect x="130" y="120" width="5" height="30" rx="2" fill="#4a5568" />
+  
+  <!-- Spoon -->
+  <circle cx="50" cy="80" r="15" fill="#ed8936" />
+  <rect x="45" y="90" width="10" height="40" rx="5" fill="#ed8936" />
+  
+  <!-- Text -->
+  <text x="100" y="150" font-family="Arial, sans-serif" font-weight="bold" font-size="16" text-anchor="middle" fill="#2d3748">KITCHEN COPILOT</text>
+</svg> 

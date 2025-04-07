@@ -1,3 +1,16 @@
+import type { Metadata, Viewport } from "next";
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+};
+
+export const metadata: Metadata = {
+  title: "Admin Dashboard | HackXperience 2025",
+  description: "Admin dashboard for managing HackXperience 2025 registrations",
+};
+
 export default async function AdminLayout({
   children,
 }: {

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Geist_Mono } from "next/font/google";
 import localFont from 'next/font/local';
 import "./globals.css";
@@ -27,14 +27,15 @@ const eightBitDragon = localFont({
   display: 'swap',
 });
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+};
+
 export const metadata: Metadata = {
   title: "HackXperience 2025 | Registration",
   description: "Register for the ultimate hackathon experience of 2025",
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 5,
-  },
 };
 
 export default function RootLayout({

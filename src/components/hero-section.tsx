@@ -61,7 +61,7 @@ export function HeroSection() {
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   const isMobile = useMediaQuery('(max-width: 639px)');
   const [preloaderDismissed, setPreloaderDismissed] = useState(false);
-  const [volume, setVolume] = useState(1);
+  const [volume, setVolume] = useState(0);
 
   // Preload the hero image with high priority
   useEffect(() => {
@@ -276,7 +276,7 @@ export function HeroSection() {
                   ref={videoRef}
                   loop
                   playsInline
-                  muted
+                  muted={true}
                   preload="metadata"
                   poster="/img/hero.jpg"
                   className={`absolute inset-0 w-full h-full object-cover rounded-xl sm:rounded-2xl ${!isVideoLoaded ? 'invisible' : ''}`}
