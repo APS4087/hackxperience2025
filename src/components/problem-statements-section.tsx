@@ -185,7 +185,7 @@ const QuestCard = ({ quest, index, isActive, onActivate }: {
   
   return (
     <motion.div
-      className={`relative w-full rounded-md overflow-hidden ${isUnlocked ? "" : "grayscale-[70%]"}`}
+      className={`relative w-full rounded-md overflow-hidden ${isUnlocked ? "" : "grayscale-[70%]"} cursor-pointer transform transition-transform duration-200 active:scale-[0.99] active:opacity-90`}
       animate={{ 
         scale: isActive ? 1 : 0.98,
         opacity: isActive ? 1 : 0.8
@@ -194,6 +194,7 @@ const QuestCard = ({ quest, index, isActive, onActivate }: {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={onActivate}
+      whileHover={{ scale: isActive ? 1.01 : 0.99 }}
     >
       {/* Background */}
       <div className={`absolute inset-0 bg-gradient-to-b ${bgColor}`}></div>
@@ -341,14 +342,13 @@ const QuestCard = ({ quest, index, isActive, onActivate }: {
               </div>
             ) : (
               <div className="h-[200px] flex items-center justify-center">
-                <button 
-                  className={`px-4 py-2 rounded font-mono ${
-                    isBlue ? "bg-blue-800 hover:bg-blue-700" : "bg-red-800 hover:bg-red-700"
-                  } text-white transition-colors duration-300`}
-                  onClick={onActivate}
-                >
-                  [ACTIVATE QUEST]
-                </button>
+                <div className={`text-center ${isBlue ? "text-blue-300" : "text-red-300"}`}>
+                  <div className={`w-16 h-16 mx-auto mb-3 rounded-full flex items-center justify-center border-2 ${borderColor} bg-black/30`}>
+                    <span className="text-2xl">📋</span>
+                  </div>
+                  <p className="font-mono text-sm">[CLICK TO ACTIVATE QUEST]</p>
+                  <div className={`mt-2 w-10 h-1 mx-auto ${isBlue ? "bg-blue-500" : "bg-red-500"} animate-pulse`}></div>
+                </div>
               </div>
             )}
           </div>
@@ -367,7 +367,7 @@ const QuestCard = ({ quest, index, isActive, onActivate }: {
                 animate={{ opacity: 1 }}
                 className="text-gray-400"
               >
-                CLICK TO {isActive ? "DEACTIVATE" : "ACTIVATE"}
+                TAP/CLICK TO {isActive ? "DEACTIVATE" : "ACTIVATE"}
               </motion.span>
             )}
           </div>
