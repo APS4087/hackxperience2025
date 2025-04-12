@@ -31,7 +31,8 @@ export function ReadySection() {
           <div className="mt-20">
             <Button 
               asChild
-              className="px-8 py-6 text-lg bg-gradient-to-r from-blue-500 to-teal-400 hover:from-blue-600 hover:to-teal-500 transition-all duration-300"
+              variant="outline"
+              className="px-8 py-6 text-lg border-2 hover:bg-background/5 hover:text-primary transition-all duration-300 rounded-xl shadow-sm"
               size="lg"
             >
               <Link href="/submit">Submit Your Project</Link>
